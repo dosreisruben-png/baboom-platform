@@ -1,5 +1,6 @@
-import { shopifyFetch } from "./client";
+import { shopifyFetch, isShopifyConfigured } from "./client";
 import type { Product, Collection, Cart } from "./types";
+import { MOCK_PRODUCTS, MOCK_PRODUCTS_BY_HANDLE } from "../mock-products";
 
 // ─── Fragments ────────────────────────────────────────────────────────────────
 
@@ -52,6 +53,16 @@ export async function getProducts({
   sortKey?: string;
   reverse?: boolean;
 } = {}): Promise<{ products: Product[]; hasNextPage: boolean; endCursor: string | null }> {
+  if (!isShopifyConfigured) {
+    const filtered = query
+      ? MOCK_PRODUCTS.filter(
+          (p) =>
+            p.title.toLowerCase().includes(query.toLowerCase()) ||
+            p.tags.some((t) => query.toLowerCase().includes(t))
+        )
+      : MOCK_PRODUCTS;
+    return { products: filtered.slice(0, first), hasNextPage: false, endCursor: null };
+  }
   try {
     const data = await shopifyFetch<{
       products: {
@@ -83,6 +94,9 @@ export async function getProducts({
 }
 
 export async function getProduct(handle: string): Promise<Product | null> {
+  if (!isShopifyConfigured) {
+    return MOCK_PRODUCTS_BY_HANDLE.get(handle) ?? null;
+  }
   try {
     const data = await shopifyFetch<{ product: Product | null }>({
       query: `
