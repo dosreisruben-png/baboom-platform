@@ -72,7 +72,7 @@ export function Header() {
             {[
               { label: "Delivery & Payment", href: "/delivery" },
               { label: "Returns", href: "/returns" },
-              { label: "Store Locator", href: "/stores" },
+              { label: "Store Locator", href: "/store-locator" },
               { label: "Contacts", href: "/contact" },
             ].map((l) => (
               <Link key={l.label} href={l.href} className="hover:text-brand-orange transition-colors">

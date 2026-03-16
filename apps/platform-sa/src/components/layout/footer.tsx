@@ -46,7 +46,7 @@ export function Footer() {
                 { label: "Order History", href: "/account/orders" },
                 { label: "Wishlist", href: "/wishlist" },
                 { label: "B2B Portal", href: "/b2b" },
-                { label: "Track Order", href: "/account/track" },
+                { label: "Track Order", href: "/account/orders" },
               ].map((l) => (
                 <li key={l.label}>
                   <Link href={l.href} className="text-sm hover:text-brand-orange transition-colors">
@@ -65,7 +65,7 @@ export function Footer() {
                 { label: "About Baboom", href: "/about" },
                 { label: "Contact Us", href: "/contact" },
                 { label: "Blog", href: "/blog" },
-                { label: "Sitemap", href: "/sitemap.xml" },
+                { label: "Sitemap", href: "/sitemap" },
                 { label: "Brands", href: "/brands" },
                 { label: "Careers", href: "/careers" },
               ].map((l) => (
