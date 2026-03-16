@@ -70,7 +70,7 @@
   }
 
   .product-card {
-    @apply group relative bg-white border border-brand-gray-100 overflow-hidden transition-shadow hover:shadow-lg;
+    @apply relative bg-white border border-brand-gray-100 overflow-hidden transition-shadow hover:shadow-lg;
   }
 
   .input-field {

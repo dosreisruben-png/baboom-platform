@@ -17,7 +17,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
     : null;
 
   return (
-    <article className={cn("product-card", className)}>
+    <article className={cn("product-card group", className)}>
       {/* Image */}
       <Link href={`/products/${product.handle}`} className="block relative aspect-square bg-brand-gray-50 overflow-hidden">
         {product.featuredImage ? (
