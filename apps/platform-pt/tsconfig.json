@@ -1,0 +1,5 @@
+{
+  "extends": "@platform/config/typescript/base",
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
