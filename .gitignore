@@ -35,3 +35,4 @@ infra/terraform/**/.terraform.lock.hcl
 # Logs
 *.log
 logs/
+.vercel
