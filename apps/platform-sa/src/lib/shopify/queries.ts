@@ -52,45 +52,52 @@ export async function getProducts({
   sortKey?: string;
   reverse?: boolean;
 } = {}): Promise<{ products: Product[]; hasNextPage: boolean; endCursor: string | null }> {
-  const data = await shopifyFetch<{
-    products: {
-      nodes: Product[];
-      pageInfo: { hasNextPage: boolean; endCursor: string | null };
-    };
-  }>({
-    query: `
-      ${PRODUCT_FRAGMENT}
-      query GetProducts($first: Int!, $after: String, $query: String, $sortKey: ProductSortKeys, $reverse: Boolean) {
-        products(first: $first, after: $after, query: $query, sortKey: $sortKey, reverse: $reverse) {
-          nodes { ...ProductFragment }
-          pageInfo { hasNextPage endCursor }
+  try {
+    const data = await shopifyFetch<{
+      products: {
+        nodes: Product[];
+        pageInfo: { hasNextPage: boolean; endCursor: string | null };
+      };
+    }>({
+      query: `
+        ${PRODUCT_FRAGMENT}
+        query GetProducts($first: Int!, $after: String, $query: String, $sortKey: ProductSortKeys, $reverse: Boolean) {
+          products(first: $first, after: $after, query: $query, sortKey: $sortKey, reverse: $reverse) {
+            nodes { ...ProductFragment }
+            pageInfo { hasNextPage endCursor }
+          }
         }
-      }
-    `,
-    variables: { first, after, query, sortKey, reverse },
-    tags: ["products"],
-  });
+      `,
+      variables: { first, after, query, sortKey, reverse },
+      tags: ["products"],
+    });
 
-  return {
-    products: data.products.nodes,
-    hasNextPage: data.products.pageInfo.hasNextPage,
-    endCursor: data.products.pageInfo.endCursor,
-  };
+    return {
+      products: data.products.nodes,
+      hasNextPage: data.products.pageInfo.hasNextPage,
+      endCursor: data.products.pageInfo.endCursor,
+    };
+  } catch {
+    return { products: [], hasNextPage: false, endCursor: null };
+  }
 }
 
 export async function getProduct(handle: string): Promise<Product | null> {
-  const data = await shopifyFetch<{ product: Product | null }>({
-    query: `
-      ${PRODUCT_FRAGMENT}
-      query GetProduct($handle: String!) {
-        product(handle: $handle) { ...ProductFragment }
-      }
-    `,
-    variables: { handle },
-    tags: [`product-${handle}`],
-  });
-
-  return data.product;
+  try {
+    const data = await shopifyFetch<{ product: Product | null }>({
+      query: `
+        ${PRODUCT_FRAGMENT}
+        query GetProduct($handle: String!) {
+          product(handle: $handle) { ...ProductFragment }
+        }
+      `,
+      variables: { handle },
+      tags: [`product-${handle}`],
+    });
+    return data.product;
+  } catch {
+    return null;
+  }
 }
 
 export async function getFeaturedProducts(first = 8): Promise<Product[]> {
@@ -105,47 +112,53 @@ export async function getFeaturedProducts(first = 8): Promise<Product[]> {
 // ─── Collections ──────────────────────────────────────────────────────────────
 
 export async function getCollections(first = 12): Promise<Collection[]> {
-  const data = await shopifyFetch<{ collections: { nodes: Collection[] } }>({
-    query: `
-      query GetCollections($first: Int!) {
-        collections(first: $first, sortKey: UPDATED_AT, reverse: true) {
-          nodes {
-            id
-            handle
-            title
-            description
-            image { url altText width height }
-            products(first: 1) { nodes { id } }
+  try {
+    const data = await shopifyFetch<{ collections: { nodes: Collection[] } }>({
+      query: `
+        query GetCollections($first: Int!) {
+          collections(first: $first, sortKey: UPDATED_AT, reverse: true) {
+            nodes {
+              id
+              handle
+              title
+              description
+              image { url altText width height }
+              products(first: 1) { nodes { id } }
+            }
           }
         }
-      }
-    `,
-    variables: { first },
-    tags: ["collections"],
-  });
-
-  return data.collections.nodes;
+      `,
+      variables: { first },
+      tags: ["collections"],
+    });
+    return data.collections.nodes;
+  } catch {
+    return [];
+  }
 }
 
 export async function getCollection(handle: string): Promise<Collection | null> {
-  const data = await shopifyFetch<{ collection: Collection | null }>({
-    query: `
-      ${PRODUCT_FRAGMENT}
-      query GetCollection($handle: String!) {
-        collection(handle: $handle) {
-          id handle title description
-          image { url altText width height }
-          products(first: 24, sortKey: BEST_SELLING) {
-            nodes { ...ProductFragment }
+  try {
+    const data = await shopifyFetch<{ collection: Collection | null }>({
+      query: `
+        ${PRODUCT_FRAGMENT}
+        query GetCollection($handle: String!) {
+          collection(handle: $handle) {
+            id handle title description
+            image { url altText width height }
+            products(first: 24, sortKey: BEST_SELLING) {
+              nodes { ...ProductFragment }
+            }
           }
         }
-      }
-    `,
-    variables: { handle },
-    tags: [`collection-${handle}`],
-  });
-
-  return data.collection;
+      `,
+      variables: { handle },
+      tags: [`collection-${handle}`],
+    });
+    return data.collection;
+  } catch {
+    return null;
+  }
 }
 
 // ─── Cart ─────────────────────────────────────────────────────────────────────

@@ -7,6 +7,13 @@ const apiVersion = "2024-04";
 
 const endpoint = `https://${domain}/api/${apiVersion}/graphql.json`;
 
+// True when the store domain looks like a real configured store
+export const isShopifyConfigured =
+  !!domain &&
+  domain !== "your-store.myshopify.com" &&
+  domain !== "placeholder" &&
+  domain.includes(".");
+
 interface ShopifyResponse<T> {
   data: T;
   errors?: ShopifyError[];
@@ -23,6 +30,10 @@ export async function shopifyFetch<T>({
   cache?: RequestCache;
   tags?: string[];
 }): Promise<T> {
+  if (!isShopifyConfigured) {
+    throw new Error("SHOPIFY_NOT_CONFIGURED");
+  }
+
   const res = await fetch(endpoint, {
     method: "POST",
     headers: {

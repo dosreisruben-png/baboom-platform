@@ -2,18 +2,27 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getFeaturedProducts } from "@/lib/shopify/queries";
 import { ProductCard, ProductCardSkeleton } from "@/components/product/product-card";
+import { isShopifyConfigured } from "@/lib/shopify/client";
 import { Suspense } from "react";
 
 async function ProductGrid() {
   const products = await getFeaturedProducts(8);
 
   if (products.length === 0) {
+    if (!isShopifyConfigured) {
+      // Design preview mode — show placeholder cards while Shopify is not yet connected
+      return (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <ProductCardSkeleton key={i} />
+          ))}
+        </div>
+      );
+    }
     return (
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <ProductCardSkeleton key={i} />
-        ))}
-      </div>
+      <p className="text-brand-gray-400 text-sm py-8 text-center">
+        No featured products yet — check back soon.
+      </p>
     );
   }
 
