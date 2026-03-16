@@ -3,14 +3,32 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "echo 'TBD: build script depends on framework choice (TRO-2)'",
-    "dev": "echo 'TBD: dev script depends on framework choice (TRO-2)'",
-    "lint": "eslint . --ext .ts,.tsx --max-warnings 0 --no-error-on-unmatched-pattern",
+    "build": "next build",
+    "dev": "next dev --port 3001",
+    "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "echo 'TBD: test runner to be configured'"
   },
+  "dependencies": {
+    "next": "^14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "@shopify/storefront-api-client": "^1.0.0",
+    "graphql": "^16.8.0",
+    "graphql-tag": "^2.12.6",
+    "lucide-react": "^0.395.0",
+    "clsx": "^2.1.0",
+    "tailwind-merge": "^2.3.0"
+  },
   "devDependencies": {
     "@platform/config": "workspace:*",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.0",
+    "eslint-config-next": "^14.2.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
     "typescript": "^5.4.0"
   }
 }
