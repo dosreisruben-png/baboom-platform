@@ -23,6 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      # Vercel CLI requires the env var to be named VERCEL_PROJECT_ID.
+      # Its value comes from the GitHub secret VERCEL_PROJECT_ID_PT.
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_PT }}
     steps:
       - name: Checkout
