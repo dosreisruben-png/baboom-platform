@@ -10,19 +10,19 @@ const B2B_FEATURES = [
 
 export function B2BCallout() {
   return (
-    <section className="bg-brand-black py-14 md:py-20">
+    <section className="bg-brand-black py-10 md:py-20">
       <div className="container-page">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           {/* Left */}
           <div>
             <p className="text-brand-orange font-bold text-sm uppercase tracking-widest mb-3">
               For Businesses & Contractors
             </p>
-            <h2 className="font-condensed font-black text-white text-4xl md:text-5xl uppercase leading-none mb-6">
+            <h2 className="font-condensed font-black text-white text-3xl md:text-5xl uppercase leading-none mb-4 md:mb-6">
               Built For<br />
               <span className="text-brand-orange">B2B Buyers.</span>
             </h2>
-            <p className="text-brand-gray-400 leading-relaxed mb-8 max-w-md">
+            <p className="text-brand-gray-400 leading-relaxed mb-5 md:mb-8 max-w-md">
               Whether you&apos;re a sole trader, contractor, or large enterprise — Baboom SA has dedicated B2B tools to streamline your procurement. Bulk pricing, quote requests, and credit accounts all in one place.
             </p>
             <div className="flex flex-col xs:flex-row gap-4">
@@ -36,11 +36,11 @@ export function B2BCallout() {
           </div>
 
           {/* Right */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             {B2B_FEATURES.map(({ icon: Icon, label, desc }) => (
               <div
                 key={label}
-                className="bg-brand-black-soft border border-brand-gray-600 p-5 hover:border-brand-orange transition-colors"
+                className="bg-brand-black-soft border border-brand-gray-600 p-4 md:p-5 hover:border-brand-orange transition-colors"
               >
                 <Icon size={24} className="text-brand-orange mb-3" />
                 <p className="font-bold text-white text-sm uppercase tracking-wide mb-1">

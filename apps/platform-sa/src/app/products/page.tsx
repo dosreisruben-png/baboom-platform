@@ -26,8 +26,25 @@ const CATEGORIES = [
   "Cleaning",
 ];
 
+const PRICE_RANGES = [
+  { label: "Under R500", value: "under-500" },
+  { label: "R500 – R2,000", value: "500-2000" },
+  { label: "R2,000 – R10,000", value: "2000-10000" },
+  { label: "R10,000+", value: "10000-plus" },
+];
+
+function parsePriceRange(price?: string): { minPrice?: number; maxPrice?: number } {
+  switch (price) {
+    case "under-500": return { maxPrice: 500 };
+    case "500-2000": return { minPrice: 500, maxPrice: 2000 };
+    case "2000-10000": return { minPrice: 2000, maxPrice: 10000 };
+    case "10000-plus": return { minPrice: 10000 };
+    default: return {};
+  }
+}
+
 interface ProductsPageProps {
-  searchParams: { category?: string; brand?: string; sort?: string; q?: string };
+  searchParams: { category?: string; brand?: string; sort?: string; q?: string; price?: string };
 }
 
 async function ProductResults({ searchParams }: ProductsPageProps) {
@@ -42,7 +59,8 @@ async function ProductResults({ searchParams }: ProductsPageProps) {
     .filter(Boolean)
     .join(" ");
 
-  const { products } = await getProducts({ first: 24, query, sortKey });
+  const { minPrice, maxPrice } = parsePriceRange(searchParams.price);
+  const { products } = await getProducts({ first: 24, query, sortKey, minPrice, maxPrice });
 
   if (products.length === 0) {
     return (
@@ -118,27 +136,31 @@ export default function ProductsPage({ searchParams }: ProductsPageProps) {
               <p className="text-xs font-bold uppercase tracking-widest text-brand-gray-400 mb-3">
                 Price (ZAR)
               </p>
-              <div className="space-y-2">
-                {["Under R500", "R500 – R2,000", "R2,000 – R10,000", "R10,000+"].map(
-                  (range) => (
-                    <label key={range} className="flex items-center gap-2 text-sm cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="accent-brand-orange"
-                      />
-                      {range}
-                    </label>
-                  )
-                )}
-              </div>
-            </div>
-
-            {/* In stock */}
-            <div>
-              <label className="flex items-center gap-2 text-sm cursor-pointer font-medium">
-                <input type="checkbox" className="accent-brand-orange" />
-                In stock only
-              </label>
+              <ul className="space-y-1">
+                {PRICE_RANGES.map(({ label, value }) => {
+                  const params = new URLSearchParams();
+                  if (searchParams.category) params.set("category", searchParams.category);
+                  if (searchParams.q) params.set("q", searchParams.q);
+                  if (searchParams.sort) params.set("sort", searchParams.sort);
+                  if (searchParams.price !== value) params.set("price", value);
+                  const href = `/products${params.toString() ? `?${params.toString()}` : ""}`;
+                  const isActive = searchParams.price === value;
+                  return (
+                    <li key={value}>
+                      <a
+                        href={href}
+                        className={`block text-sm py-1.5 px-2 transition-colors ${
+                          isActive
+                            ? "bg-brand-orange text-white font-bold"
+                            : "text-brand-gray-600 hover:text-brand-orange"
+                        }`}
+                      >
+                        {label}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           </aside>
 
@@ -157,7 +179,7 @@ export default function ProductsPage({ searchParams }: ProductsPageProps) {
               </Suspense>
             </div>
 
-            <FilterDrawer activeCategory={searchParams.category} />
+            <FilterDrawer activeCategory={searchParams.category} activePrice={searchParams.price} />
 
             <Suspense
               fallback={

@@ -9,11 +9,19 @@ const CATEGORIES = [
   "Storage & Workshop", "Cleaning",
 ];
 
+const PRICE_RANGES = [
+  { label: "Under R500", value: "under-500" },
+  { label: "R500 – R2,000", value: "500-2000" },
+  { label: "R2,000 – R10,000", value: "2000-10000" },
+  { label: "R10,000+", value: "10000-plus" },
+];
+
 interface FilterDrawerProps {
   activeCategory: string | undefined;
+  activePrice?: string;
 }
 
-export function FilterDrawer({ activeCategory }: FilterDrawerProps) {
+export function FilterDrawer({ activeCategory, activePrice }: FilterDrawerProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -64,27 +72,31 @@ export function FilterDrawer({ activeCategory }: FilterDrawerProps) {
               {/* Price */}
               <div>
                 <p className="text-xs font-bold uppercase tracking-widest text-brand-gray-400 mb-3">Price (ZAR)</p>
-                <div className="space-y-2">
-                  {["Under R500", "R500 – R2,000", "R2,000 – R10,000", "R10,000+"].map((range) => (
-                    <label key={range} className="flex items-center gap-2 text-sm cursor-pointer">
-                      <input type="checkbox" className="accent-brand-orange" />
-                      {range}
-                    </label>
-                  ))}
-                </div>
+                <ul className="space-y-1">
+                  {PRICE_RANGES.map(({ label, value }) => {
+                    const params = new URLSearchParams();
+                    if (activeCategory && activeCategory !== "All") params.set("category", activeCategory);
+                    if (activePrice !== value) params.set("price", value);
+                    const href = `/products${params.toString() ? `?${params.toString()}` : ""}`;
+                    const isActive = activePrice === value;
+                    return (
+                      <li key={value}>
+                        <a
+                          href={href}
+                          onClick={() => setOpen(false)}
+                          className={`block text-sm py-2 px-2 transition-colors ${
+                            isActive
+                              ? "bg-brand-orange text-white font-bold"
+                              : "text-brand-gray-600 hover:text-brand-orange"
+                          }`}
+                        >
+                          {label}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
-              {/* In stock */}
-              <label className="flex items-center gap-2 text-sm cursor-pointer font-medium">
-                <input type="checkbox" className="accent-brand-orange" />
-                In stock only
-              </label>
-              {/* Apply button */}
-              <button
-                onClick={() => setOpen(false)}
-                className="w-full btn-primary py-3"
-              >
-                Apply Filters
-              </button>
             </div>
           </div>
         </div>

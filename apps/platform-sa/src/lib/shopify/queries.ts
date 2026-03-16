@@ -46,23 +46,42 @@ export async function getProducts({
   query,
   sortKey = "RELEVANCE",
   reverse = false,
+  minPrice,
+  maxPrice,
 }: {
   first?: number;
   after?: string;
   query?: string;
   sortKey?: string;
   reverse?: boolean;
+  minPrice?: number;
+  maxPrice?: number;
 } = {}): Promise<{ products: Product[]; hasNextPage: boolean; endCursor: string | null }> {
   if (!isShopifyConfigured) {
-    const filtered = query
+    let filtered = query
       ? MOCK_PRODUCTS.filter(
           (p) =>
             p.title.toLowerCase().includes(query.toLowerCase()) ||
             p.tags.some((t) => query.toLowerCase().includes(t))
         )
       : MOCK_PRODUCTS;
+    if (minPrice !== undefined || maxPrice !== undefined) {
+      filtered = filtered.filter((p) => {
+        const price = parseFloat(p.priceRange.minVariantPrice.amount);
+        if (minPrice !== undefined && price < minPrice) return false;
+        if (maxPrice !== undefined && price > maxPrice) return false;
+        return true;
+      });
+    }
     return { products: filtered.slice(0, first), hasNextPage: false, endCursor: null };
   }
+  const priceQuery = [
+    minPrice !== undefined ? `price:>=${minPrice}` : null,
+    maxPrice !== undefined ? `price:<=${maxPrice}` : null,
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const fullQuery = [query, priceQuery].filter(Boolean).join(" ") || undefined;
   try {
     const data = await shopifyFetch<{
       products: {
@@ -79,7 +98,7 @@ export async function getProducts({
           }
         }
       `,
-      variables: { first, after, query, sortKey, reverse },
+      variables: { first, after, query: fullQuery, sortKey, reverse },
       tags: ["products"],
     });
 

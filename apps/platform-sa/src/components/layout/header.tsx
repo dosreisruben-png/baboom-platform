@@ -46,6 +46,7 @@ const CATEGORIES = [
 export function Header() {
   const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [accountDrawerOpen, setAccountDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
@@ -57,9 +58,9 @@ export function Header() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = drawerOpen ? "hidden" : "";
+    document.body.style.overflow = (drawerOpen || accountDrawerOpen) ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [drawerOpen]);
+  }, [drawerOpen, accountDrawerOpen]);
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -164,6 +165,13 @@ export function Header() {
             <Link href="/account" className="hidden md:flex items-center p-2 hover:text-brand-orange transition-colors" aria-label="Account">
               <User size={20} />
             </Link>
+            <button
+              onClick={() => setAccountDrawerOpen(true)}
+              className="md:hidden p-2 hover:text-brand-orange transition-colors"
+              aria-label="Account"
+            >
+              <User size={20} />
+            </button>
             <Link href="/cart" className="p-2 hover:text-brand-orange transition-colors relative" aria-label="Cart">
               <ShoppingCart size={20} />
             </Link>
@@ -189,6 +197,60 @@ export function Header() {
           </div>
         )}
       </header>
+
+      {/* ── Mobile Account Drawer ────────────────────────── */}
+      {accountDrawerOpen && (
+        <div className="fixed inset-0 z-50 flex justify-end md:hidden">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setAccountDrawerOpen(false)} />
+          <div className="relative w-72 max-w-[85vw] bg-white h-full flex flex-col shadow-2xl animate-slide-in-right">
+            {/* Drawer header */}
+            <div className="bg-brand-black px-5 py-4 flex items-center justify-between flex-shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-brand-gray-600 flex items-center justify-center">
+                  <User size={18} className="text-white" />
+                </div>
+                <p className="text-white font-bold text-sm leading-tight">My Account</p>
+              </div>
+              <button onClick={() => setAccountDrawerOpen(false)} className="text-white hover:text-brand-orange transition-colors p-1 flex-shrink-0">
+                <X size={20} />
+              </button>
+            </div>
+            {/* Account options */}
+            <div className="flex-1 p-5 space-y-3">
+              <Link
+                href="/account"
+                onClick={() => setAccountDrawerOpen(false)}
+                className="flex items-center justify-center w-full btn-secondary py-3 text-sm"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/account/register"
+                onClick={() => setAccountDrawerOpen(false)}
+                className="flex items-center justify-center w-full btn-outline py-3 text-sm"
+              >
+                Register
+              </Link>
+              <div className="border-t border-brand-edge pt-4 space-y-1">
+                {[
+                  { label: "Order History", href: "/account/orders" },
+                  { label: "Wishlist", href: "/wishlist" },
+                  { label: "B2B Portal", href: "/b2b" },
+                ].map((l) => (
+                  <Link
+                    key={l.label}
+                    href={l.href}
+                    onClick={() => setAccountDrawerOpen(false)}
+                    className="flex items-center gap-2 text-sm text-brand-gray-600 hover:text-brand-orange transition-colors py-2"
+                  >
+                    {l.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Hamburger Drawer ─────────────────────────────── */}
       {drawerOpen && (

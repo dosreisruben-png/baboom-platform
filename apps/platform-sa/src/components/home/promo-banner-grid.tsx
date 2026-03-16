@@ -35,22 +35,22 @@ const PROMOS = [
 
 export function PromoBannerGrid() {
   return (
-    <section className="py-12 md:py-16 bg-brand-gray-50 border-b border-brand-edge">
+    <section className="py-6 md:py-16 bg-brand-gray-50 border-b border-brand-edge">
       <div className="container-page">
-        <h2 className="text-2xl md:text-3xl font-black text-brand-black mb-6">
+        <h2 className="text-xl md:text-3xl font-black text-brand-black mb-4 md:mb-6">
           Discover some of our <span className="text-brand-orange">promotions</span>
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
           {PROMOS.map((promo) => (
             <div
               key={promo.title}
-              className={`${promo.bg} p-8 flex flex-col justify-between min-h-[240px] group hover:scale-[1.02] transition-transform duration-300 cursor-pointer`}
+              className={`${promo.bg} p-5 md:p-8 flex flex-col justify-between min-h-[160px] md:min-h-[240px] group hover:scale-[1.02] transition-transform duration-300 cursor-pointer`}
             >
               <div>
                 <p className={`text-xs font-bold uppercase tracking-widest ${promo.accent} mb-2`}>
                   {promo.brand}
                 </p>
-                <h3 className={`text-2xl font-black ${promo.textColor} mb-2 leading-tight`}>
+                <h3 className={`text-xl md:text-2xl font-black ${promo.textColor} mb-2 leading-tight`}>
                   {promo.title}
                 </h3>
                 <p className={`text-sm ${promo.textColor} opacity-70 leading-relaxed`}>
@@ -59,7 +59,7 @@ export function PromoBannerGrid() {
               </div>
               <Link
                 href={promo.href}
-                className={`mt-6 inline-flex items-center gap-2 text-sm font-bold ${promo.accent} hover:underline`}
+                className={`mt-4 md:mt-6 inline-flex items-center gap-2 text-sm font-bold ${promo.accent} hover:underline`}
               >
                 {promo.cta} →
               </Link>
