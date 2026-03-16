@@ -3,6 +3,7 @@ import { getProducts } from "@/lib/shopify/queries";
 import { ProductCard, ProductCardSkeleton } from "@/components/product/product-card";
 import { Suspense } from "react";
 import { SlidersHorizontal } from "lucide-react";
+import { FilterDrawer } from "@/components/products/filter-drawer";
 
 export const metadata: Metadata = {
   title: "Products",
@@ -90,7 +91,7 @@ export default function ProductsPage({ searchParams }: ProductsPageProps) {
       <div className="container-page py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar filters */}
-          <aside className="lg:w-56 flex-shrink-0">
+          <aside className="hidden lg:block lg:w-56 flex-shrink-0">
             <div className="flex items-center gap-2 font-bold text-sm uppercase tracking-wide mb-4">
               <SlidersHorizontal size={16} />
               Filters
@@ -169,6 +170,8 @@ export default function ProductsPage({ searchParams }: ProductsPageProps) {
                 ))}
               </select>
             </div>
+
+            <FilterDrawer activeCategory={searchParams.category} />
 
             <Suspense
               fallback={

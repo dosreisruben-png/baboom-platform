@@ -16,14 +16,14 @@ export function FeaturedCategories() {
   return (
     <section className="py-10 border-b border-brand-edge">
       <div className="container-page">
-        <div className="flex overflow-x-auto scrollbar-hide gap-4 pb-2">
+        <div className="grid grid-cols-4 gap-3 sm:flex sm:overflow-x-auto sm:scrollbar-hide sm:gap-4 sm:pb-2">
           {CATEGORIES.map((cat) => {
             const Icon = cat.icon;
             return (
               <Link
                 key={cat.label}
                 href={cat.href}
-                className="flex-shrink-0 flex flex-col items-center gap-3 group w-[120px]"
+                className="flex flex-col items-center gap-2 group sm:flex-shrink-0 sm:w-[120px]"
               >
                 <div className="w-full aspect-square bg-[#F5F5F5] rounded-sm flex items-center justify-center border border-brand-edge group-hover:border-brand-orange group-hover:shadow-md transition-all duration-200 relative overflow-hidden">
                   <Icon size={36} className="text-brand-orange group-hover:scale-110 transition-transform duration-200" />

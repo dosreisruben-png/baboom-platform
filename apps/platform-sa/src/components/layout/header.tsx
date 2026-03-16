@@ -115,7 +115,7 @@ export function Header() {
           </button>
 
           {/* Search */}
-          <div className="flex-1 relative mx-2">
+          <div className="hidden md:flex flex-1 relative mx-2">
             <input
               type="text"
               placeholder="Search 19,000+ products..."
@@ -128,16 +128,21 @@ export function Header() {
             </button>
           </div>
 
+          {/* Mobile search icon */}
+          <button className="md:hidden ml-auto p-2 hover:text-brand-orange transition-colors" aria-label="Search">
+            <Search size={22} />
+          </button>
+
           {/* Right actions */}
           <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
             <a href="tel:+27110000000" className="hidden xl:flex items-center gap-2 text-sm font-semibold text-brand-black hover:text-brand-orange transition-colors whitespace-nowrap">
               <Phone size={16} className="text-brand-orange" />
               +27 11 000 0000
             </a>
-            <Link href="/wishlist" className="p-2 hover:text-brand-orange transition-colors" aria-label="Wishlist">
+            <Link href="/wishlist" className="hidden md:flex items-center p-2 hover:text-brand-orange transition-colors" aria-label="Wishlist">
               <Heart size={20} />
             </Link>
-            <Link href="/account" className="p-2 hover:text-brand-orange transition-colors" aria-label="Account">
+            <Link href="/account" className="hidden md:flex items-center p-2 hover:text-brand-orange transition-colors" aria-label="Account">
               <User size={20} />
             </Link>
             <Link href="/cart" className="p-2 hover:text-brand-orange transition-colors relative" aria-label="Cart">

@@ -49,7 +49,7 @@
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl font-black text-brand-black leading-tight;
+    @apply text-2xl md:text-3xl lg:text-4xl font-black text-brand-black leading-tight;
   }
 
   .section-title-accent {

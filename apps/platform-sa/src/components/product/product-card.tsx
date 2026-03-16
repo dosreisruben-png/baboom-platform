@@ -55,7 +55,7 @@ export function ProductCard({ product, className, badge }: ProductCardProps) {
   return (
     <Link href={`/products/${product.handle}`} className={cn("product-card block group", className)}>
       {/* Image container */}
-      <div className="relative aspect-square bg-brand-gray-50 overflow-hidden">
+      <div className="relative aspect-square bg-brand-gray-50 overflow-hidden max-h-40 sm:max-h-none">
         {/* Badges — top left stack */}
         <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
           {discount && (
@@ -88,12 +88,12 @@ export function ProductCard({ product, className, badge }: ProductCardProps) {
           onClick={handleAddToCart}
           disabled={!product.availableForSale}
           className={cn(
-            "absolute bottom-2 right-2 w-9 h-9 rounded-full bg-brand-orange text-white flex items-center justify-center shadow-lg hover:bg-brand-orange-dark transition-all disabled:opacity-40 disabled:cursor-not-allowed z-10",
+            "absolute bottom-2 right-2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-brand-orange text-white flex items-center justify-center shadow-lg hover:bg-brand-orange-dark transition-all disabled:opacity-40 disabled:cursor-not-allowed z-10",
             cartPulse && "animate-pulse-once"
           )}
           aria-label="Add to cart"
         >
-          <ShoppingCart size={16} />
+          <ShoppingCart size={14} />
         </button>
 
         {/* Settings / configure icon */}
