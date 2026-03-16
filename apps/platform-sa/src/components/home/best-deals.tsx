@@ -53,7 +53,7 @@ export function BestDeals({ products }: BestDealsProps) {
   }
 
   return (
-    <section className="py-12 md:py-16 bg-[#1a4a32] border-b border-brand-border">
+    <section className="py-12 md:py-16 bg-[#1a4a32] border-b border-brand-edge">
       <div className="container-page">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left panel */}

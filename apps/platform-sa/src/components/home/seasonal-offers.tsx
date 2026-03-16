@@ -14,7 +14,7 @@ async function SeasonalContent() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       {/* Left: featured product card */}
-      <div className="border border-brand-border bg-white p-4 flex flex-col">
+      <div className="border border-brand-edge bg-white p-4 flex flex-col">
         {featured ? (
           <>
             <div className="flex-1 bg-brand-gray-50 rounded-sm flex items-center justify-center p-6 mb-4 min-h-[200px]">
@@ -34,7 +34,7 @@ async function SeasonalContent() {
       </div>
 
       {/* Centre: large featured with arrow nav placeholder */}
-      <div className="border border-brand-border bg-white p-4 flex flex-col items-center justify-center relative min-h-[320px]">
+      <div className="border border-brand-edge bg-white p-4 flex flex-col items-center justify-center relative min-h-[320px]">
         {centre ? (
           <>
             <div className="w-full bg-brand-gray-50 rounded-sm flex items-center justify-center p-8 mb-4 flex-1">
@@ -49,7 +49,7 @@ async function SeasonalContent() {
       </div>
 
       {/* Right: stacked small rows */}
-      <div className="border border-brand-border bg-white divide-y divide-brand-border">
+      <div className="border border-brand-edge bg-white divide-y divide-brand-edge">
         {sideItems.length > 0 ? sideItems.map((product) => (
           <Link key={product.id} href={`/products/${product.handle}`} className="flex items-center gap-3 p-3 hover:bg-brand-gray-50 transition-colors group">
             <div className="w-16 h-16 bg-brand-gray-50 flex-shrink-0 flex items-center justify-center">
@@ -81,7 +81,7 @@ async function SeasonalContent() {
 
 export function SeasonalOffers() {
   return (
-    <section className="py-12 md:py-16 bg-brand-gray-50 border-b border-brand-border">
+    <section className="py-12 md:py-16 bg-brand-gray-50 border-b border-brand-edge">
       <div className="container-page">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl md:text-3xl font-black text-brand-black">
@@ -95,7 +95,7 @@ export function SeasonalOffers() {
           fallback={
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="border border-brand-border bg-white min-h-[320px] animate-pulse" />
+                <div key={i} className="border border-brand-edge bg-white min-h-[320px] animate-pulse" />
               ))}
             </div>
           }

@@ -95,7 +95,7 @@ export function ProductCard({ product, className, badge }: ProductCardProps) {
         </button>
 
         {/* Settings / configure icon */}
-        <button className="absolute bottom-2 right-12 w-9 h-9 rounded-full bg-white border border-brand-border text-brand-gray-600 flex items-center justify-center hover:border-brand-orange hover:text-brand-orange transition-all opacity-0 group-hover:opacity-100 z-10">
+        <button className="absolute bottom-2 right-12 w-9 h-9 rounded-full bg-white border border-brand-edge text-brand-gray-600 flex items-center justify-center hover:border-brand-orange hover:text-brand-orange transition-all opacity-0 group-hover:opacity-100 z-10">
           <Settings size={14} />
         </button>
       </div>
@@ -155,7 +155,7 @@ export function ProductCard({ product, className, badge }: ProductCardProps) {
 
 export function ProductCardSkeleton() {
   return (
-    <div className="border border-brand-border bg-white animate-pulse">
+    <div className="border border-brand-edge bg-white animate-pulse">
       <div className="aspect-square bg-brand-gray-100" />
       <div className="p-3 space-y-2">
         <div className="h-3 bg-brand-gray-100 rounded w-3/4" />

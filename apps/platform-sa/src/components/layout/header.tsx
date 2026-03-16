@@ -62,7 +62,7 @@ export function Header() {
   return (
     <>
       {/* ── Layer 1: Utility bar ─────────────────────────── */}
-      <div className="bg-gray-100 border-b border-brand-border text-xs text-brand-gray-600 hidden md:block">
+      <div className="bg-gray-100 border-b border-brand-edge text-xs text-brand-gray-600 hidden md:block">
         <div className="container-page flex items-center justify-between h-9">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
@@ -85,14 +85,14 @@ export function Header() {
           </div>
           <div className="flex items-center gap-3">
             <span className="font-semibold text-brand-black">ZAR</span>
-            <span className="text-brand-border">|</span>
+            <span className="text-brand-edge">|</span>
             <span className="font-semibold text-brand-black">EN</span>
           </div>
         </div>
       </div>
 
       {/* ── Layer 2: Main header ─────────────────────────── */}
-      <header className={`sticky top-0 z-40 bg-white border-b border-brand-border transition-shadow duration-300 ${scrolled ? "shadow-md" : ""}`}>
+      <header className={`sticky top-0 z-40 bg-white border-b border-brand-edge transition-shadow duration-300 ${scrolled ? "shadow-md" : ""}`}>
         <div className="container-page flex items-center gap-3 h-16 md:h-20">
           {/* Hamburger */}
           <button
@@ -121,7 +121,7 @@ export function Header() {
               placeholder="Search 19,000+ products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full border border-brand-border px-4 py-2.5 pr-12 text-sm focus:outline-none focus:border-brand-orange transition-colors rounded-sm"
+              className="w-full border border-brand-edge px-4 py-2.5 pr-12 text-sm focus:outline-none focus:border-brand-orange transition-colors rounded-sm"
             />
             <button className="absolute right-0 top-0 h-full px-4 bg-brand-orange text-white hover:bg-brand-orange-dark transition-colors rounded-sm">
               <Search size={17} />
@@ -180,7 +180,7 @@ export function Header() {
                     key={cat.name}
                     href={cat.href}
                     onClick={() => setDrawerOpen(false)}
-                    className="flex items-center gap-3 px-5 py-3.5 hover:bg-brand-gray-50 transition-colors group border-b border-brand-border last:border-0"
+                    className="flex items-center gap-3 px-5 py-3.5 hover:bg-brand-gray-50 transition-colors group border-b border-brand-edge last:border-0"
                   >
                     <div className="flex-shrink-0 w-9 h-9 bg-brand-gray-50 rounded-sm flex items-center justify-center group-hover:bg-brand-orange transition-colors">
                       <Icon size={17} className="text-brand-orange group-hover:text-white transition-colors" />
@@ -196,7 +196,7 @@ export function Header() {
             </div>
 
             {/* Drawer footer */}
-            <div className="border-t border-brand-border bg-brand-gray-50 px-5 py-4 flex-shrink-0">
+            <div className="border-t border-brand-edge bg-brand-gray-50 px-5 py-4 flex-shrink-0">
               <div className="grid grid-cols-2 gap-2 text-xs text-brand-gray-600">
                 {[
                   { icon: MapPin, label: "Johannesburg" },

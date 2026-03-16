@@ -57,7 +57,7 @@
   }
 
   .product-card {
-    @apply relative bg-white border border-brand-border overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5;
+    @apply relative bg-white border border-brand-edge overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5;
   }
 
   .badge-discount {
@@ -89,7 +89,7 @@
   }
 
   .input-field {
-    @apply w-full border border-brand-border px-4 py-3 text-brand-black placeholder-brand-gray-400 focus:outline-none focus:border-brand-orange transition-colors;
+    @apply w-full border border-brand-edge px-4 py-3 text-brand-black placeholder-brand-gray-400 focus:outline-none focus:border-brand-orange transition-colors;
   }
 
   .tab-active {
@@ -97,7 +97,7 @@
   }
 
   .tab-inactive {
-    @apply bg-white text-[#333333] border border-brand-border hover:border-brand-orange hover:text-brand-orange;
+    @apply bg-white text-[#333333] border border-brand-edge hover:border-brand-orange hover:text-brand-orange;
   }
 }
 

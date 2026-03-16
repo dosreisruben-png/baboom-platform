@@ -35,7 +35,7 @@ const PROMOS = [
 
 export function PromoBannerGrid() {
   return (
-    <section className="py-12 md:py-16 bg-brand-gray-50 border-b border-brand-border">
+    <section className="py-12 md:py-16 bg-brand-gray-50 border-b border-brand-edge">
       <div className="container-page">
         <h2 className="text-2xl md:text-3xl font-black text-brand-black mb-6">
           Discover some of our <span className="text-brand-orange">promotions</span>

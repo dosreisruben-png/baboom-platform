@@ -33,7 +33,7 @@ function InDemandCarousel({ products }: InDemandClientProps) {
       {canScrollLeft && (
         <button
           onClick={() => scroll("left")}
-          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 bg-white border border-brand-border shadow-md flex items-center justify-center hover:border-brand-orange hover:text-brand-orange transition-all"
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 bg-white border border-brand-edge shadow-md flex items-center justify-center hover:border-brand-orange hover:text-brand-orange transition-all"
         >
           <ChevronLeft size={18} />
         </button>
@@ -56,7 +56,7 @@ function InDemandCarousel({ products }: InDemandClientProps) {
       {canScrollRight && (
         <button
           onClick={() => scroll("right")}
-          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 bg-white border border-brand-border shadow-md flex items-center justify-center hover:border-brand-orange hover:text-brand-orange transition-all"
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 bg-white border border-brand-edge shadow-md flex items-center justify-center hover:border-brand-orange hover:text-brand-orange transition-all"
         >
           <ChevronRight size={18} />
         </button>
@@ -71,7 +71,7 @@ interface InDemandProps {
 
 export function InDemand({ products }: InDemandProps) {
   return (
-    <section className="py-12 md:py-16 bg-white border-b border-brand-border">
+    <section className="py-12 md:py-16 bg-white border-b border-brand-edge">
       <div className="container-page">
         <div className="flex items-end justify-between mb-6">
           <h2 className="text-2xl md:text-3xl font-black">

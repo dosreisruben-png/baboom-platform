@@ -66,7 +66,7 @@ async function ProductGridServer() {
 
 export function FeaturedProducts() {
   return (
-    <section className="py-12 md:py-16 bg-white border-b border-brand-border">
+    <section className="py-12 md:py-16 bg-white border-b border-brand-edge">
       <div className="container-page">
         <div className="flex items-end justify-between mb-6">
           <div>

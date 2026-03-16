@@ -23,7 +23,7 @@ const CAMPAIGNS = [
 
 export function ExplorePromos() {
   return (
-    <section className="py-12 md:py-16 bg-brand-orange border-b border-brand-border">
+    <section className="py-12 md:py-16 bg-brand-orange border-b border-brand-edge">
       <div className="container-page">
         <h2 className="text-3xl md:text-4xl font-black text-white mb-8 text-center">
           Explore Current Promotions

@@ -17,7 +17,7 @@ const config: Config = {
           "black-soft": "#1A1A1A",
           "black-muted": "#2C2C2C",
           white: "#FFFFFF",
-          border: "#EEEEEE",
+          edge: "#EEEEEE",
           green: "#2DB560",
           gray: {
             50: "#F9F9F9",

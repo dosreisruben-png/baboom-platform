@@ -14,7 +14,7 @@ export function Newsletter() {
   }
 
   return (
-    <section className="py-14 bg-brand-black border-b border-brand-border">
+    <section className="py-14 bg-brand-black border-b border-brand-edge">
       <div className="container-page">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex items-center gap-4">

@@ -55,7 +55,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   return (
     <div className="min-h-screen">
       {/* Breadcrumb */}
-      <div className="bg-brand-gray-50 border-b border-brand-border">
+      <div className="bg-brand-gray-50 border-b border-brand-edge">
         <div className="container-page py-3 flex items-center gap-2 text-xs text-brand-gray-400">
           <Link href="/" className="hover:text-brand-orange transition-colors">Home</Link>
           <ChevronRight size={12} />
@@ -69,7 +69,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
           {/* ── Images ────────────────────────────────────── */}
           <div>
-            <div className="relative aspect-square bg-brand-gray-50 border border-brand-border overflow-hidden mb-3">
+            <div className="relative aspect-square bg-brand-gray-50 border border-brand-edge overflow-hidden mb-3">
               {product.featuredImage ? (
                 <Image
                   src={product.featuredImage.url}
@@ -95,7 +95,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {product.images.nodes.length > 1 && (
               <div className="flex gap-2 overflow-x-auto scrollbar-hide">
                 {product.images.nodes.slice(0, 6).map((img, i) => (
-                  <div key={i} className="relative w-16 h-16 flex-shrink-0 border-2 border-brand-border hover:border-brand-orange transition-colors cursor-pointer bg-brand-gray-50">
+                  <div key={i} className="relative w-16 h-16 flex-shrink-0 border-2 border-brand-edge hover:border-brand-orange transition-colors cursor-pointer bg-brand-gray-50">
                     <Image
                       src={img.url}
                       alt={img.altText ?? `${product.title} ${i + 1}`}
@@ -133,7 +133,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <StarRow />
 
             {/* Price */}
-            <div className="flex items-baseline gap-3 my-5 pb-5 border-b border-brand-border">
+            <div className="flex items-baseline gap-3 my-5 pb-5 border-b border-brand-edge">
               <span className="text-3xl font-black text-brand-black">
                 {formatMoney(product.priceRange.minVariantPrice)}
               </span>
@@ -172,7 +172,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   {product.variants.nodes.map((variant) => (
                     <button
                       key={variant.id}
-                      className="border-2 border-brand-border px-3 py-1.5 text-sm font-semibold hover:border-brand-orange transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="border-2 border-brand-edge px-3 py-1.5 text-sm font-semibold hover:border-brand-orange transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                       disabled={!variant.availableForSale}
                     >
                       {variant.title}
@@ -184,7 +184,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* Quantity + CTA */}
             <div className="flex items-center gap-3 mb-4">
-              <div className="flex items-center border-2 border-brand-border">
+              <div className="flex items-center border-2 border-brand-edge">
                 <button className="px-3 py-3 font-bold hover:bg-brand-gray-50 transition-colors text-lg leading-none">−</button>
                 <span className="px-5 py-3 font-bold min-w-[48px] text-center">1</span>
                 <button className="px-3 py-3 font-bold hover:bg-brand-gray-50 transition-colors text-lg leading-none">+</button>
@@ -205,7 +205,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </button>
 
             {/* Trust badges */}
-            <div className="grid grid-cols-3 gap-3 text-center text-xs text-brand-gray-400 border-t border-brand-border pt-5">
+            <div className="grid grid-cols-3 gap-3 text-center text-xs text-brand-gray-400 border-t border-brand-edge pt-5">
               {[
                 { icon: Truck, label: "Fast SA Delivery" },
                 { icon: ShieldCheck, label: "Genuine Product" },
@@ -221,7 +221,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
 
             {/* B2B upsell */}
-            <div className="mt-5 bg-brand-gray-50 border border-brand-border p-4 text-sm">
+            <div className="mt-5 bg-brand-gray-50 border border-brand-edge p-4 text-sm">
               <p className="font-bold text-brand-black mb-1">Buying in bulk?</p>
               <p className="text-brand-gray-600">
                 B2B accounts get volume discounts from 5+ units.{" "}
@@ -235,7 +235,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         {/* Description */}
         {product.descriptionHtml && (
-          <div className="mt-14 pt-10 border-t border-brand-border">
+          <div className="mt-14 pt-10 border-t border-brand-edge">
             <h2 className="text-2xl font-black text-brand-black mb-6">Product Details</h2>
             <div
               className="prose prose-sm max-w-none text-brand-gray-600 [&_h3]:font-bold [&_h3]:text-brand-black"
@@ -251,7 +251,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <Link
                 key={tag}
                 href={`/products?q=${encodeURIComponent(tag)}`}
-                className="text-xs border border-brand-border px-3 py-1.5 text-brand-gray-600 hover:border-brand-orange hover:text-brand-orange transition-colors"
+                className="text-xs border border-brand-edge px-3 py-1.5 text-brand-gray-600 hover:border-brand-orange hover:text-brand-orange transition-colors"
               >
                 {tag}
               </Link>

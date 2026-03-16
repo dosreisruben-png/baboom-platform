@@ -14,7 +14,7 @@ const CATEGORIES = [
 
 export function FeaturedCategories() {
   return (
-    <section className="py-10 border-b border-brand-border">
+    <section className="py-10 border-b border-brand-edge">
       <div className="container-page">
         <div className="flex overflow-x-auto scrollbar-hide gap-4 pb-2">
           {CATEGORIES.map((cat) => {
@@ -25,7 +25,7 @@ export function FeaturedCategories() {
                 href={cat.href}
                 className="flex-shrink-0 flex flex-col items-center gap-3 group w-[120px]"
               >
-                <div className={`w-full aspect-square ${cat.bg} rounded-sm flex items-center justify-center border border-brand-border group-hover:border-brand-orange group-hover:shadow-md transition-all duration-200 relative overflow-hidden`}>
+                <div className={`w-full aspect-square ${cat.bg} rounded-sm flex items-center justify-center border border-brand-edge group-hover:border-brand-orange group-hover:shadow-md transition-all duration-200 relative overflow-hidden`}>
                   <Icon size={36} className="text-brand-orange group-hover:scale-110 transition-transform duration-200" />
                   {/* Orange underline slide-in on hover */}
                   <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-orange scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left" />
