@@ -1,62 +1,41 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { Wrench, Zap, Scissors, HardHat, Ruler, Flame, Droplets, Settings } from "lucide-react";
 
 const CATEGORIES = [
-  { label: "Power Tools", href: "/products?category=power-tools", count: "3,200+", emoji: "⚡" },
-  { label: "Hand Tools", href: "/products?category=hand-tools", count: "2,800+", emoji: "🔧" },
-  { label: "Safety & PPE", href: "/products?category=safety", count: "1,500+", emoji: "🦺" },
-  { label: "Electrical", href: "/products?category=electrical", count: "2,100+", emoji: "💡" },
-  { label: "Plumbing", href: "/products?category=plumbing", count: "1,800+", emoji: "🔩" },
-  { label: "Fasteners", href: "/products?category=fasteners", count: "4,000+", emoji: "⚙️" },
-  { label: "Abrasives", href: "/products?category=abrasives", count: "900+", emoji: "🪨" },
-  { label: "Welding", href: "/products?category=welding", count: "750+", emoji: "🔥" },
+  { label: "Hand Tools", href: "/products?category=hand-tools", icon: Wrench, bg: "bg-orange-50" },
+  { label: "Power Tools", href: "/products?category=power-tools", icon: Zap, bg: "bg-yellow-50" },
+  { label: "Cutting Tools", href: "/products?category=cutting-tools", icon: Scissors, bg: "bg-red-50" },
+  { label: "PPE & Safety", href: "/products?category=safety", icon: HardHat, bg: "bg-green-50" },
+  { label: "Measuring", href: "/products?category=measuring", icon: Ruler, bg: "bg-blue-50" },
+  { label: "Welding", href: "/products?category=welding", icon: Flame, bg: "bg-orange-50" },
+  { label: "Lubricants", href: "/products?category=lubricants", icon: Droplets, bg: "bg-cyan-50" },
+  { label: "Abrasives", href: "/products?category=abrasives", icon: Settings, bg: "bg-gray-50" },
 ];
 
 export function FeaturedCategories() {
   return (
-    <section className="py-14 md:py-20">
+    <section className="py-10 border-b border-brand-border">
       <div className="container-page">
-        <div className="flex items-end justify-between mb-8">
-          <div>
-            <p className="text-brand-orange font-bold text-sm uppercase tracking-widest mb-2">
-              Shop by Category
-            </p>
-            <h2 className="section-title">
-              19,000+ Products.<br />
-              <span className="section-title-accent">Find Yours.</span>
-            </h2>
-          </div>
-          <Link
-            href="/products"
-            className="hidden md:flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-brand-orange hover:underline"
-          >
-            All Categories <ArrowRight size={16} />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
-          {CATEGORIES.map((cat) => (
-            <Link
-              key={cat.label}
-              href={cat.href}
-              className="group flex flex-col items-center text-center p-4 border-2 border-brand-gray-100 hover:border-brand-orange transition-colors bg-white"
-            >
-              <span className="text-3xl mb-3">{cat.emoji}</span>
-              <span className="font-bold text-xs uppercase tracking-wide text-brand-black group-hover:text-brand-orange transition-colors leading-tight mb-1">
-                {cat.label}
-              </span>
-              <span className="text-xs text-brand-gray-400">{cat.count}</span>
-            </Link>
-          ))}
-        </div>
-
-        <div className="mt-6 text-center md:hidden">
-          <Link
-            href="/products"
-            className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-brand-orange"
-          >
-            Browse All Categories <ArrowRight size={14} />
-          </Link>
+        <div className="flex overflow-x-auto scrollbar-hide gap-4 pb-2">
+          {CATEGORIES.map((cat) => {
+            const Icon = cat.icon;
+            return (
+              <Link
+                key={cat.label}
+                href={cat.href}
+                className="flex-shrink-0 flex flex-col items-center gap-3 group w-[120px]"
+              >
+                <div className={`w-full aspect-square ${cat.bg} rounded-sm flex items-center justify-center border border-brand-border group-hover:border-brand-orange group-hover:shadow-md transition-all duration-200 relative overflow-hidden`}>
+                  <Icon size={36} className="text-brand-orange group-hover:scale-110 transition-transform duration-200" />
+                  {/* Orange underline slide-in on hover */}
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-orange scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left" />
+                </div>
+                <span className="text-xs font-semibold text-brand-black text-center group-hover:text-brand-orange transition-colors leading-tight">
+                  {cat.label}
+                </span>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>

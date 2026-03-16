@@ -17,6 +17,9 @@ const config: Config = {
           "black-soft": "#1A1A1A",
           "black-muted": "#2C2C2C",
           white: "#FFFFFF",
+          text: "#333333",
+          border: "#EEEEEE",
+          green: "#2DB560",
           gray: {
             50: "#F9F9F9",
             100: "#F0F0F0",
@@ -27,17 +30,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-barlow)", "Inter", "system-ui", "sans-serif"],
-        condensed: [
-          "var(--font-barlow-condensed)",
-          "Barlow Condensed",
-          "sans-serif",
-        ],
-      },
-      fontSize: {
-        "display-xl": ["4.5rem", { lineHeight: "1", fontWeight: "800" }],
-        "display-lg": ["3.5rem", { lineHeight: "1.05", fontWeight: "800" }],
-        "display-md": ["2.5rem", { lineHeight: "1.1", fontWeight: "700" }],
+        sans: ["Inter", "system-ui", "sans-serif"],
+        inter: ["Inter", "system-ui", "sans-serif"],
       },
       spacing: {
         "18": "4.5rem",
@@ -47,6 +41,10 @@ const config: Config = {
       animation: {
         "fade-in": "fadeIn 0.3s ease-in-out",
         "slide-down": "slideDown 0.2s ease-out",
+        "slide-left": "slideLeft 0.5s ease-in-out",
+        "slide-right": "slideRight 0.5s ease-in-out",
+        "slide-in-left": "slideInLeft 0.3s ease-out",
+        "pulse-once": "pulseOnce 0.4s ease-in-out",
       },
       keyframes: {
         fadeIn: {
@@ -57,9 +55,29 @@ const config: Config = {
           "0%": { transform: "translateY(-8px)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "1" },
         },
+        slideLeft: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
+        slideRight: {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(0)" },
+        },
+        slideInLeft: {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(0)" },
+        },
+        pulseOnce: {
+          "0%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.15)" },
+          "100%": { transform: "scale(1)" },
+        },
       },
       screens: {
         xs: "375px",
+      },
+      transitionTimingFunction: {
+        smooth: "cubic-bezier(0.4, 0, 0.2, 1)",
       },
     },
   },

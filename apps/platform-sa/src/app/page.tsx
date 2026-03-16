@@ -2,48 +2,53 @@ import { Hero } from "@/components/home/hero";
 import { TrustBadges } from "@/components/home/trust-badges";
 import { FeaturedCategories } from "@/components/home/featured-categories";
 import { FeaturedProducts } from "@/components/home/featured-products";
+import { SeasonalOffers } from "@/components/home/seasonal-offers";
+import { InDemand } from "@/components/home/in-demand";
+import { PromoBannerGrid } from "@/components/home/promo-banner-grid";
+import { BestDeals } from "@/components/home/best-deals";
+import { ExplorePromos } from "@/components/home/explore-promos";
 import { B2BCallout } from "@/components/home/b2b-callout";
-import Link from "next/link";
-import { GraduationCap, ArrowRight } from "lucide-react";
+import { Newsletter } from "@/components/home/newsletter";
+import { getFeaturedProducts } from "@/lib/shopify/queries";
 
-export default function HomePage() {
+export default async function HomePage() {
+  // Fetch products server-side; pass to client carousel components
+  const products = await getFeaturedProducts(12);
+
   return (
     <>
+      {/* 1. Hero Slider */}
       <Hero />
+
+      {/* 2. Trust badges */}
       <TrustBadges />
+
+      {/* 3. Category Icon Row */}
       <FeaturedCategories />
+
+      {/* 4. You May Be Interested (tabbed products) */}
       <FeaturedProducts />
+
+      {/* 5. Seasonal Offers Best Choice */}
+      <SeasonalOffers />
+
+      {/* 6. In Demand This Week (carousel) */}
+      <InDemand products={products} />
+
+      {/* 7. Promotional Banner Grid */}
+      <PromoBannerGrid />
+
+      {/* 8. Best Deals of the Day (countdown + carousel) */}
+      <BestDeals products={products} />
+
+      {/* 9. Explore Current Promotions */}
+      <ExplorePromos />
+
+      {/* 10. B2B Callout */}
       <B2BCallout />
 
-      {/* Student Financing Teaser */}
-      <section className="py-14 bg-white border-t border-brand-gray-100">
-        <div className="container-page">
-          <div className="flex flex-col md:flex-row items-center gap-8 bg-brand-orange/5 border-2 border-brand-orange p-8 md:p-12">
-            <div className="flex-shrink-0">
-              <div className="w-16 h-16 bg-brand-orange flex items-center justify-center">
-                <GraduationCap size={32} className="text-white" />
-              </div>
-            </div>
-            <div className="flex-1 text-center md:text-left">
-              <p className="text-brand-orange font-bold text-sm uppercase tracking-widest mb-2">
-                Student & Graduate Financing
-              </p>
-              <h2 className="font-condensed font-black text-3xl md:text-4xl text-brand-black uppercase mb-3">
-                Get Your Tools Now. Pay Over Time.
-              </h2>
-              <p className="text-brand-gray-600 leading-relaxed">
-                We&apos;re partnering with financing providers to help students and young tradespeople access the tools they need to start their careers. Affordable monthly repayments, no large upfront cost.
-              </p>
-            </div>
-            <Link
-              href="/financing"
-              className="flex-shrink-0 btn-primary text-sm px-8 py-4 whitespace-nowrap"
-            >
-              Learn More <ArrowRight size={16} />
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* 11. Newsletter */}
+      <Newsletter />
     </>
   );
 }

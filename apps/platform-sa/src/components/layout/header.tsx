@@ -1,309 +1,219 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X, Search, ShoppingCart, Phone, ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
+import Link from "next/link";
+import {
+  MapPin,
+  Phone,
+  Heart,
+  User,
+  ShoppingCart,
+  Search,
+  Menu,
+  X,
+  Grid,
+  ChevronRight,
+  ChevronDown,
+  Wrench,
+  Zap,
+  Scissors,
+  HardHat,
+  Ruler,
+  Flame,
+  Shield,
+  Droplets,
+  Settings,
+  Shirt,
+  Home,
+  FileText,
+} from "lucide-react";
 
 const CATEGORIES = [
-  {
-    label: "Power Tools",
-    href: "/products?category=power-tools",
-    sub: ["Drills", "Grinders", "Sanders", "Saws", "Impact Wrenches"],
-  },
-  {
-    label: "Hand Tools",
-    href: "/products?category=hand-tools",
-    sub: ["Hammers", "Screwdrivers", "Spanners", "Pliers", "Measuring"],
-  },
-  {
-    label: "Safety & PPE",
-    href: "/products?category=safety",
-    sub: ["Helmets", "Gloves", "Eyewear", "Footwear", "High-Vis"],
-  },
-  {
-    label: "Electrical",
-    href: "/products?category=electrical",
-    sub: ["Cable & Wire", "Conduit", "Switches", "Lighting", "Generators"],
-  },
-  {
-    label: "Plumbing",
-    href: "/products?category=plumbing",
-    sub: ["Pipes", "Fittings", "Valves", "Pumps", "Fixtures"],
-  },
-  {
-    label: "Fasteners",
-    href: "/products?category=fasteners",
-    sub: ["Bolts & Nuts", "Screws", "Anchors", "Rivets", "Washers"],
-  },
-];
-
-const NAV_LINKS = [
-  { label: "Products", href: "/products", hasMega: true },
-  { label: "B2B / Bulk", href: "/b2b" },
-  { label: "Student Finance", href: "/financing" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { name: "Hand Tools", description: "Spanners, pliers, hammers & more", icon: Wrench, href: "/products?category=hand-tools" },
+  { name: "Power Tools", description: "Drills, grinders, saws & more", icon: Zap, href: "/products?category=power-tools" },
+  { name: "Cutting Tools", description: "Blades, drill bits, taps & dies", icon: Scissors, href: "/products?category=cutting-tools" },
+  { name: "Abrasives", description: "Grinding wheels, sandpaper & more", icon: Settings, href: "/products?category=abrasives" },
+  { name: "PPE & Safety", description: "Helmets, gloves, glasses & more", icon: HardHat, href: "/products?category=safety" },
+  { name: "Measuring Equipment", description: "Calipers, levels, tape measures", icon: Ruler, href: "/products?category=measuring" },
+  { name: "Welding", description: "Electrodes, wire, helmets & torches", icon: Flame, href: "/products?category=welding" },
+  { name: "Lubricants & Chemicals", description: "Oils, greases, cleaning agents", icon: Droplets, href: "/products?category=lubricants" },
+  { name: "Bearings", description: "Ball, roller, thrust & more", icon: Settings, href: "/products?category=bearings" },
+  { name: "Workwear", description: "Overalls, boots, hi-vis clothing", icon: Shirt, href: "/products?category=workwear" },
+  { name: "Site Maintenance", description: "Cleaning, storage & facility products", icon: Home, href: "/products?category=site-maintenance" },
+  { name: "Office & Workshop", description: "Stationery, storage & organisation", icon: FileText, href: "/products?category=office-workshop" },
 ];
 
 export function Header() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [megaOpen, setMegaOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 0);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const handler = () => setScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
   }, []);
 
   useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = drawerOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [mobileOpen]);
+  }, [drawerOpen]);
 
   return (
     <>
-      {/* Top bar */}
-      <div className="bg-brand-black text-white text-xs py-2 hidden md:block">
-        <div className="container-page flex items-center justify-between">
-          <span className="text-brand-gray-400">
-            South Africa&apos;s Premier Industrial & Hardware Supplier
-          </span>
-          <div className="flex items-center gap-6">
-            <a href="tel:+27800BABOOM" className="flex items-center gap-1 hover:text-brand-orange transition-colors">
-              <Phone size={12} />
-              0800 BABOOM
-            </a>
-            <Link href="/b2b" className="hover:text-brand-orange transition-colors">
-              B2B Portal
-            </Link>
-            <Link href="/financing" className="hover:text-brand-orange transition-colors">
-              Student Finance
-            </Link>
+      {/* ── Layer 1: Utility bar ─────────────────────────── */}
+      <div className="bg-gray-100 border-b border-brand-border text-xs text-brand-gray-600 hidden md:block">
+        <div className="container-page flex items-center justify-between h-9">
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-1">
+              <MapPin size={12} className="text-brand-orange" />
+              Johannesburg, ZA
+            </span>
+            {[
+              { label: "Delivery & Payment", href: "/delivery" },
+              { label: "Returns", href: "/returns" },
+              { label: "Store Locator", href: "/stores" },
+              { label: "Contacts", href: "/contact" },
+            ].map((l) => (
+              <Link key={l.label} href={l.href} className="hover:text-brand-orange transition-colors">
+                {l.label}
+              </Link>
+            ))}
+            <button className="flex items-center gap-1 hover:text-brand-orange transition-colors">
+              Information <ChevronDown size={10} />
+            </button>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="font-semibold text-brand-black">ZAR</span>
+            <span className="text-brand-border">|</span>
+            <span className="font-semibold text-brand-black">EN</span>
           </div>
         </div>
       </div>
 
-      {/* Main header */}
-      <header
-        className={cn(
-          "sticky top-0 z-50 bg-white transition-shadow",
-          scrolled && "shadow-md"
-        )}
-      >
-        <div className="container-page">
-          <div className="flex items-center gap-4 h-16 md:h-18">
-            {/* Logo */}
-            <Link href="/" className="flex-shrink-0 flex items-center gap-1">
-              <span className="font-condensed font-black text-2xl md:text-3xl text-brand-black uppercase tracking-tighter">
-                BABOOM
-              </span>
-              <span className="font-condensed font-black text-2xl md:text-3xl text-brand-orange uppercase tracking-tighter">
-                .
-              </span>
-              <span className="hidden xs:block font-condensed font-semibold text-xs text-brand-gray-600 uppercase tracking-widest ml-1 leading-tight">
-                SA
-              </span>
-            </Link>
+      {/* ── Layer 2: Main header ─────────────────────────── */}
+      <header className={`sticky top-0 z-40 bg-white border-b border-brand-border transition-shadow duration-300 ${scrolled ? "shadow-md" : ""}`}>
+        <div className="container-page flex items-center gap-3 h-16 md:h-20">
+          {/* Hamburger */}
+          <button
+            onClick={() => setDrawerOpen(true)}
+            className="flex-shrink-0 p-2 hover:text-brand-orange transition-colors"
+            aria-label="Open menu"
+          >
+            <Menu size={22} />
+          </button>
 
-            {/* Search bar — desktop */}
-            <div className="hidden md:flex flex-1 max-w-2xl mx-4">
-              <div className="flex w-full border-2 border-brand-black focus-within:border-brand-orange transition-colors">
-                <input
-                  type="search"
-                  placeholder="Search 19,000+ products..."
-                  className="flex-1 px-4 py-2.5 text-sm outline-none bg-brand-gray-50"
-                />
-                <button className="bg-brand-orange text-white px-5 flex items-center hover:bg-brand-orange-dark transition-colors">
-                  <Search size={18} />
-                </button>
-              </div>
-            </div>
+          {/* Wordmark */}
+          <Link href="/" className="flex-shrink-0 font-black text-2xl md:text-3xl text-brand-orange tracking-tight uppercase">
+            BABOOM
+          </Link>
 
-            {/* Actions */}
-            <div className="flex items-center gap-3 ml-auto md:ml-0">
-              <button className="md:hidden p-2 text-brand-gray-600">
-                <Search size={20} />
-              </button>
-              <Link
-                href="/cart"
-                className="relative flex items-center gap-2 font-bold text-sm hover:text-brand-orange transition-colors"
-              >
-                <ShoppingCart size={22} />
-                <span className="hidden sm:inline uppercase tracking-wide">Cart</span>
-                <span className="absolute -top-1 -right-1 md:-right-3 md:static md:inline-flex items-center justify-center bg-brand-orange text-white text-xs font-bold min-w-[20px] h-5 px-1 rounded-full md:rounded-none">
-                  0
-                </span>
-              </Link>
-              <Link
-                href="/b2b"
-                className="hidden lg:inline-flex btn-secondary text-sm py-2 px-4"
-              >
-                B2B Login
-              </Link>
-            </div>
+          {/* Categories pill */}
+          <button className="hidden lg:flex items-center gap-2 bg-brand-orange text-white font-bold text-sm px-4 py-2 rounded-full whitespace-nowrap hover:bg-brand-orange-dark transition-colors ml-1">
+            <Grid size={15} />
+            Categories
+          </button>
 
-            {/* Mobile hamburger */}
-            <button
-              className="md:hidden p-2 text-brand-black"
-              onClick={() => setMobileOpen(true)}
-              aria-label="Open menu"
-            >
-              <Menu size={24} />
+          {/* Search */}
+          <div className="flex-1 relative mx-2">
+            <input
+              type="text"
+              placeholder="Search 19,000+ products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full border border-brand-border px-4 py-2.5 pr-12 text-sm focus:outline-none focus:border-brand-orange transition-colors rounded-sm"
+            />
+            <button className="absolute right-0 top-0 h-full px-4 bg-brand-orange text-white hover:bg-brand-orange-dark transition-colors rounded-sm">
+              <Search size={17} />
             </button>
           </div>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center border-t border-brand-gray-100">
-            {NAV_LINKS.map((link) =>
-              link.hasMega ? (
-                <div
-                  key={link.label}
-                  className="relative"
-                  onMouseEnter={() => setMegaOpen(true)}
-                  onMouseLeave={() => setMegaOpen(false)}
-                >
-                  <button className="flex items-center gap-1 px-4 py-3 text-sm font-bold uppercase tracking-wide hover:text-brand-orange transition-colors">
-                    {link.label}
-                    <ChevronDown size={14} className={cn("transition-transform", megaOpen && "rotate-180")} />
-                  </button>
-                  {megaOpen && <MegaMenu />}
-                </div>
-              ) : (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="px-4 py-3 text-sm font-bold uppercase tracking-wide hover:text-brand-orange transition-colors"
-                >
-                  {link.label}
-                </Link>
-              )
-            )}
-          </nav>
+          {/* Right actions */}
+          <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
+            <a href="tel:+27110000000" className="hidden xl:flex items-center gap-2 text-sm font-semibold text-brand-black hover:text-brand-orange transition-colors whitespace-nowrap">
+              <Phone size={16} className="text-brand-orange" />
+              +27 11 000 0000
+            </a>
+            <Link href="/wishlist" className="p-2 hover:text-brand-orange transition-colors" aria-label="Wishlist">
+              <Heart size={20} />
+            </Link>
+            <Link href="/account" className="p-2 hover:text-brand-orange transition-colors" aria-label="Account">
+              <User size={20} />
+            </Link>
+            <Link href="/cart" className="p-2 hover:text-brand-orange transition-colors relative" aria-label="Cart">
+              <ShoppingCart size={20} />
+              <span className="absolute -top-0.5 -right-0.5 bg-brand-orange text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                0
+              </span>
+            </Link>
+          </div>
         </div>
       </header>
 
-      {/* Mobile drawer */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <div
-            className="absolute inset-0 bg-black/60"
-            onClick={() => setMobileOpen(false)}
-          />
-          <div className="absolute left-0 top-0 bottom-0 w-[85vw] max-w-sm bg-white flex flex-col animate-slide-down overflow-y-auto">
+      {/* ── Hamburger Drawer ─────────────────────────────── */}
+      {drawerOpen && (
+        <div className="fixed inset-0 z-50 flex">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setDrawerOpen(false)} />
+          <div className="relative w-80 max-w-[90vw] bg-white h-full flex flex-col overflow-y-auto shadow-2xl animate-slide-in-left">
             {/* Drawer header */}
-            <div className="flex items-center justify-between p-4 border-b bg-brand-black text-white">
-              <span className="font-condensed font-black text-xl uppercase tracking-tight">
-                BABOOM<span className="text-brand-orange">.</span>SA
-              </span>
-              <button onClick={() => setMobileOpen(false)} aria-label="Close menu">
-                <X size={24} />
+            <div className="bg-brand-black px-5 py-4 flex items-center justify-between flex-shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-brand-gray-600 flex items-center justify-center">
+                  <User size={18} className="text-white" />
+                </div>
+                <div>
+                  <p className="text-white font-bold text-sm leading-tight">Sign in / Register</p>
+                  <p className="text-brand-gray-400 text-xs">Sign in to get more opportunities</p>
+                </div>
+              </div>
+              <button onClick={() => setDrawerOpen(false)} className="text-white hover:text-brand-orange transition-colors p-1 flex-shrink-0">
+                <X size={20} />
               </button>
             </div>
 
-            {/* Search */}
-            <div className="p-4 border-b">
-              <div className="flex border-2 border-brand-black">
-                <input
-                  type="search"
-                  placeholder="Search products..."
-                  className="flex-1 px-3 py-2.5 text-sm outline-none"
-                />
-                <button className="bg-brand-orange text-white px-4">
-                  <Search size={16} />
-                </button>
-              </div>
+            {/* Category list */}
+            <div className="flex-1">
+              {CATEGORIES.map((cat) => {
+                const Icon = cat.icon;
+                return (
+                  <Link
+                    key={cat.name}
+                    href={cat.href}
+                    onClick={() => setDrawerOpen(false)}
+                    className="flex items-center gap-3 px-5 py-3.5 hover:bg-brand-gray-50 transition-colors group border-b border-brand-border last:border-0"
+                  >
+                    <div className="flex-shrink-0 w-9 h-9 bg-brand-gray-50 rounded-sm flex items-center justify-center group-hover:bg-brand-orange transition-colors">
+                      <Icon size={17} className="text-brand-orange group-hover:text-white transition-colors" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-sm text-brand-black leading-tight">{cat.name}</p>
+                      <p className="text-xs text-brand-gray-400 truncate">{cat.description}</p>
+                    </div>
+                    <ChevronRight size={14} className="text-brand-gray-400 flex-shrink-0" />
+                  </Link>
+                );
+              })}
             </div>
 
-            {/* Nav links */}
-            <nav className="flex-1">
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="flex items-center justify-between px-5 py-4 font-bold uppercase tracking-wide border-b border-brand-gray-100 hover:bg-brand-gray-50 hover:text-brand-orange transition-colors"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-
-              {/* Categories */}
-              <div className="px-5 pt-4 pb-2">
-                <p className="text-xs font-bold text-brand-gray-400 uppercase tracking-widest mb-3">
-                  Shop by Category
-                </p>
-                {CATEGORIES.map((cat) => (
-                  <Link
-                    key={cat.label}
-                    href={cat.href}
-                    className="flex items-center py-2.5 text-sm font-semibold hover:text-brand-orange transition-colors border-b border-brand-gray-100"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {cat.label}
-                  </Link>
+            {/* Drawer footer */}
+            <div className="border-t border-brand-border bg-brand-gray-50 px-5 py-4 flex-shrink-0">
+              <div className="grid grid-cols-2 gap-2 text-xs text-brand-gray-600">
+                {[
+                  { icon: MapPin, label: "Johannesburg" },
+                  { icon: Shield, label: "Returns Policy" },
+                  { icon: Zap, label: "Delivery Info" },
+                  { icon: Settings, label: "Languages" },
+                ].map(({ icon: Icon, label }) => (
+                  <button key={label} className="flex items-center gap-1.5 hover:text-brand-orange transition-colors py-1">
+                    <Icon size={12} />
+                    {label}
+                  </button>
                 ))}
               </div>
-            </nav>
-
-            {/* CTA */}
-            <div className="p-4 border-t bg-brand-gray-50">
-              <Link
-                href="/b2b"
-                className="btn-primary w-full text-sm"
-                onClick={() => setMobileOpen(false)}
-              >
-                B2B / Bulk Orders
-              </Link>
             </div>
           </div>
         </div>
       )}
     </>
-  );
-}
-
-function MegaMenu() {
-  return (
-    <div className="absolute left-0 top-full bg-white border-t-2 border-brand-orange shadow-xl w-[700px] grid grid-cols-3 gap-0 p-6 animate-slide-down z-50">
-      {CATEGORIES.map((cat) => (
-        <div key={cat.label} className="mb-4">
-          <Link
-            href={cat.href}
-            className="block font-bold text-sm uppercase tracking-wide text-brand-black hover:text-brand-orange transition-colors mb-2"
-          >
-            {cat.label}
-          </Link>
-          <ul className="space-y-1">
-            {cat.sub.map((item) => (
-              <li key={item}>
-                <Link
-                  href={`/products?category=${cat.label.toLowerCase()}&sub=${item.toLowerCase()}`}
-                  className="text-sm text-brand-gray-600 hover:text-brand-orange transition-colors"
-                >
-                  {item}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-      <div className="col-span-3 border-t pt-4 mt-2 flex items-center justify-between">
-        <Link
-          href="/products"
-          className="text-sm font-bold text-brand-orange uppercase tracking-wide hover:underline"
-        >
-          View all 19,000+ products →
-        </Link>
-        <Link href="/b2b" className="btn-secondary text-xs py-2 px-4">
-          B2B Bulk Pricing
-        </Link>
-      </div>
-    </div>
   );
 }

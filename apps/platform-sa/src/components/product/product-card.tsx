@@ -1,96 +1,167 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Star, Copy, Settings } from "lucide-react";
 import type { Product } from "@/lib/shopify/types";
 import { formatMoney, getDiscountPercentage, cn } from "@/lib/utils";
+import { useState } from "react";
 
 interface ProductCardProps {
   product: Product;
   className?: string;
+  badge?: "popular" | "new" | "sale" | "coming-soon";
 }
 
-export function ProductCard({ product, className }: ProductCardProps) {
+function StarRating({ rating = 4.5, count = 0 }: { rating?: number; count?: number }) {
+  return (
+    <div className="flex items-center gap-1">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <Star
+          key={star}
+          size={11}
+          className={star <= Math.round(rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300 fill-gray-300"}
+        />
+      ))}
+      <span className="text-xs text-brand-gray-400 ml-0.5">({count})</span>
+    </div>
+  );
+}
+
+export function ProductCard({ product, className, badge }: ProductCardProps) {
+  const [cartPulse, setCartPulse] = useState(false);
+  const [skuCopied, setSkuCopied] = useState(false);
+
   const firstVariant = product.variants.nodes[0];
-  const compareAtPrice = firstVariant?.compareAtPrice ?? null;
   const discount = firstVariant
-    ? getDiscountPercentage(firstVariant.price, compareAtPrice)
+    ? getDiscountPercentage(firstVariant.price, firstVariant.compareAtPrice)
     : null;
 
+  const sku = product.handle.toUpperCase().slice(0, 10);
+
+  function handleCopySku(e: React.MouseEvent) {
+    e.preventDefault();
+    void navigator.clipboard.writeText(sku);
+    setSkuCopied(true);
+    setTimeout(() => setSkuCopied(false), 1500);
+  }
+
+  function handleAddToCart(e: React.MouseEvent) {
+    e.preventDefault();
+    setCartPulse(true);
+    setTimeout(() => setCartPulse(false), 400);
+  }
+
   return (
-    <article className={cn("product-card group", className)}>
-      {/* Image */}
-      <Link href={`/products/${product.handle}`} className="block relative aspect-square bg-brand-gray-50 overflow-hidden">
+    <Link href={`/products/${product.handle}`} className={cn("product-card block group", className)}>
+      {/* Image container */}
+      <div className="relative aspect-square bg-brand-gray-50 overflow-hidden">
+        {/* Badges — top left stack */}
+        <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
+          {discount && (
+            <span className="badge-discount">-{discount}%</span>
+          )}
+          {badge === "popular" && <span className="badge-popular">Most Popular</span>}
+          {badge === "new" && <span className="badge-new">New</span>}
+          {badge === "coming-soon" && <span className="badge-coming-soon">Coming Soon</span>}
+          {badge === "sale" && <span className="badge-sale">On Sale</span>}
+        </div>
+
         {product.featuredImage ? (
           <Image
             src={product.featuredImage.url}
             alt={product.featuredImage.altText ?? product.title}
             fill
-            className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center text-brand-gray-200">
-            <span className="font-condensed font-black text-4xl text-brand-gray-200 opacity-30">
-              BABOOM
-            </span>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="font-black text-3xl text-brand-gray-200">B</span>
           </div>
         )}
 
-        {/* Badges */}
-        <div className="absolute top-2 left-2 flex flex-col gap-1">
-          {!product.availableForSale && (
-            <span className="badge-b2b">Out of Stock</span>
+        {/* Add to cart button — bottom right */}
+        <button
+          onClick={handleAddToCart}
+          disabled={!product.availableForSale}
+          className={cn(
+            "absolute bottom-2 right-2 w-9 h-9 rounded-full bg-brand-orange text-white flex items-center justify-center shadow-lg hover:bg-brand-orange-dark transition-all disabled:opacity-40 disabled:cursor-not-allowed z-10",
+            cartPulse && "animate-pulse-once"
           )}
-          {discount && <span className="badge-sale">-{discount}%</span>}
-        </div>
-      </Link>
+          aria-label="Add to cart"
+        >
+          <ShoppingCart size={16} />
+        </button>
 
-      {/* Info */}
-      <div className="p-3 md:p-4">
-        <p className="text-xs text-brand-gray-400 uppercase tracking-wide mb-1 truncate">
-          {product.vendor}
-        </p>
-        <Link href={`/products/${product.handle}`}>
-          <h3 className="font-bold text-sm text-brand-black leading-snug line-clamp-2 mb-3 hover:text-brand-orange transition-colors">
-            {product.title}
-          </h3>
-        </Link>
+        {/* Settings / configure icon */}
+        <button className="absolute bottom-2 right-12 w-9 h-9 rounded-full bg-white border border-brand-border text-brand-gray-600 flex items-center justify-center hover:border-brand-orange hover:text-brand-orange transition-all opacity-0 group-hover:opacity-100 z-10">
+          <Settings size={14} />
+        </button>
+      </div>
+
+      {/* Card body */}
+      <div className="p-3">
+        {/* Product name */}
+        <h3 className="text-sm font-semibold text-brand-black line-clamp-2 leading-snug mb-1 group-hover:text-brand-orange transition-colors">
+          {product.title}
+        </h3>
+
+        {/* SKU */}
+        <div className="flex items-center gap-1 mb-2">
+          <span className="text-xs text-brand-gray-400">SKU: {sku}</span>
+          <button
+            onClick={handleCopySku}
+            className="text-brand-gray-400 hover:text-brand-orange transition-colors"
+            aria-label="Copy SKU"
+          >
+            <Copy size={11} />
+          </button>
+          {skuCopied && <span className="text-xs text-brand-green font-medium">Copied!</span>}
+        </div>
+
+        {/* Rating */}
+        <StarRating />
+
+        {/* Stock status */}
+        <div className="mt-1.5 mb-2">
+          {product.availableForSale ? (
+            <span className="in-stock">● In stock</span>
+          ) : (
+            <span className="on-backorder">● On backorder</span>
+          )}
+        </div>
 
         {/* Price */}
-        <div className="flex items-baseline gap-2 mb-3">
-          <span className="font-condensed font-black text-lg text-brand-black">
+        <div className="flex items-baseline gap-2 flex-wrap">
+          <span className="text-base font-black text-brand-black">
             {formatMoney(product.priceRange.minVariantPrice)}
           </span>
-          {compareAtPrice && (
-            <span className="text-sm text-brand-gray-400 line-through">
-              {formatMoney(compareAtPrice)}
+          {firstVariant?.compareAtPrice && (
+            <span className="text-xs text-brand-gray-400 line-through">
+              {formatMoney(firstVariant.compareAtPrice)}
+            </span>
+          )}
+          {discount && (
+            <span className="text-xs bg-brand-orange/10 text-brand-orange font-bold px-1.5 py-0.5 rounded-sm">
+              -{discount}%
             </span>
           )}
         </div>
-
-        {/* Add to cart */}
-        <button
-          className="w-full flex items-center justify-center gap-2 bg-brand-orange text-white text-xs font-bold py-2.5 uppercase tracking-wide hover:bg-brand-orange-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled={!product.availableForSale}
-        >
-          <ShoppingCart size={14} />
-          {product.availableForSale ? "Add to Cart" : "Out of Stock"}
-        </button>
       </div>
-    </article>
+    </Link>
   );
 }
 
 export function ProductCardSkeleton() {
   return (
-    <div className="product-card animate-pulse">
+    <div className="border border-brand-border bg-white animate-pulse">
       <div className="aspect-square bg-brand-gray-100" />
-      <div className="p-4 space-y-2">
+      <div className="p-3 space-y-2">
+        <div className="h-3 bg-brand-gray-100 rounded w-3/4" />
+        <div className="h-3 bg-brand-gray-100 rounded w-1/2" />
         <div className="h-3 bg-brand-gray-100 rounded w-1/3" />
-        <div className="h-4 bg-brand-gray-100 rounded w-full" />
-        <div className="h-4 bg-brand-gray-100 rounded w-2/3" />
-        <div className="h-6 bg-brand-gray-100 rounded w-1/2 mt-2" />
-        <div className="h-9 bg-brand-gray-100 rounded" />
+        <div className="h-4 bg-brand-gray-100 rounded w-2/3 mt-2" />
       </div>
     </div>
   );
