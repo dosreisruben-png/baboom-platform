@@ -1,0 +1,61 @@
+name: Deploy — PT Platform
+
+on:
+  push:
+    branches:
+      - main      # → prod
+      - staging   # → staging
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        type: choice
+        options: [dev, staging, prod]
+
+concurrency:
+  group: deploy-pt-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy PT (${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'staging' || inputs.environment }})
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name == 'main' && 'pt-prod' || github.ref_name == 'staging' && 'pt-staging' || format('pt-{0}', inputs.environment) }}
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (eu-south-2)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_PT_DEPLOY_ROLE_ARN }}
+          aws-region: eu-south-2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build PT platform
+        run: pnpm --filter @platform/pt build
+        env:
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
+      - name: Deploy to AWS (eu-south-2)
+        # TODO: Replace with actual deploy step once infra is defined (TRO-2/TRO-5)
+        run: echo "Deploy step TBD — depends on infra type (ECS, Lambda, App Runner, etc.)"

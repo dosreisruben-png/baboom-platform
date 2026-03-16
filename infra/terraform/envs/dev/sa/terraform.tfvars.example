@@ -1,0 +1,5 @@
+# Copy to terraform.tfvars (gitignored) for local Terraform runs
+# In CI/CD, these are injected via GitHub Actions environment secrets
+
+# project_name = "platform-sa"
+# environment  = "dev"

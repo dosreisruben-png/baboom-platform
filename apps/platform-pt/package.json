@@ -1,0 +1,16 @@
+{
+  "name": "@platform/pt",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "echo 'TBD: build script depends on framework choice (TRO-2)'",
+    "dev": "echo 'TBD: dev script depends on framework choice (TRO-2)'",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "test": "echo 'TBD: test runner to be configured'"
+  },
+  "devDependencies": {
+    "@platform/config": "workspace:*",
+    "typescript": "^5.4.0"
+  }
+}
