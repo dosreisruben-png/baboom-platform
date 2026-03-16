@@ -3,7 +3,7 @@ name: Deploy — SA Platform
 on:
   push:
     branches:
-      - main      # → prod
+      - main      # → production
       - staging   # → preview
   workflow_dispatch:
     inputs:
@@ -11,7 +11,7 @@ on:
         description: "Target environment"
         required: true
         type: choice
-        options: [preview, prod]
+        options: [preview, production]
 
 concurrency:
   group: deploy-sa-${{ github.ref_name }}
@@ -19,8 +19,11 @@ concurrency:
 
 jobs:
   deploy:
-    name: Deploy SA to Vercel (${{ github.ref_name == 'main' && 'prod' || 'preview' }})
+    name: Deploy SA to Vercel
     runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_SA }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,25 +43,28 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install Vercel CLI
-        run: pnpm add -g vercel@latest
+        run: npm install --global vercel@latest
 
-      - name: Pull Vercel environment
-        run: vercel pull --yes --environment=${{ github.ref_name == 'main' && 'production' || 'preview' }} --token=${{ secrets.VERCEL_TOKEN }}
-        working-directory: apps/platform-sa
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_SA }}
+      - name: Pull Vercel environment (production)
+        if: github.ref_name == 'main'
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Build SA platform
-        run: vercel build ${{ github.ref_name == 'main' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
-        working-directory: apps/platform-sa
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_SA }}
+      - name: Pull Vercel environment (preview)
+        if: github.ref_name != 'main'
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Deploy to Vercel
-        run: vercel deploy --prebuilt ${{ github.ref_name == 'main' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
-        working-directory: apps/platform-sa
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_SA }}
+      - name: Build (production)
+        if: github.ref_name == 'main'
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build (preview)
+        if: github.ref_name != 'main'
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy (production)
+        if: github.ref_name == 'main'
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy (preview)
+        if: github.ref_name != 'main'
+        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
