@@ -48,8 +48,8 @@ jobs:
 
       - name: Deploy to Vercel (production)
         if: github.ref_name == 'main'
-        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy to Vercel (preview)
         if: github.ref_name != 'main'
-        run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}
+        run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }}
