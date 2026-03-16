@@ -44,7 +44,9 @@ interface BestDealsProps {
 }
 
 export function BestDeals({ products }: BestDealsProps) {
-  const endDate = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000); // 2 days from now
+  // Stable reference — must not be recreated on every render or useCountdown's
+  // useEffect([targetDate]) will loop: setTimeLeft → re-render → new Date → re-run effect
+  const [endDate] = useState(() => new Date(Date.now() + 2 * 24 * 60 * 60 * 1000));
   const countdown = useCountdown(endDate);
   const scrollRef = useRef<HTMLDivElement>(null);
 

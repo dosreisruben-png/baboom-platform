@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -40,16 +40,22 @@ const SLIDES = [
 export function Hero() {
   const [current, setCurrent] = useState(0);
   const [animating, setAnimating] = useState(false);
+  // Use a ref for the guard so goTo has a stable reference (empty dep array).
+  // If animating were in the dep array, goTo/next would recreate on every
+  // animating toggle, causing useEffect([next]) to restart the interval and
+  // loop indefinitely.
+  const animatingRef = useRef(false);
 
-  const goTo = useCallback(
-    (index: number) => {
-      if (animating) return;
-      setAnimating(true);
-      setCurrent(index);
-      setTimeout(() => setAnimating(false), 600);
-    },
-    [animating]
-  );
+  const goTo = useCallback((index: number) => {
+    if (animatingRef.current) return;
+    animatingRef.current = true;
+    setAnimating(true);
+    setCurrent(index);
+    setTimeout(() => {
+      animatingRef.current = false;
+      setAnimating(false);
+    }, 600);
+  }, []); // stable — reads animatingRef, not animating state
 
   const next = useCallback(() => goTo((current + 1) % SLIDES.length), [current, goTo]);
   const prev = useCallback(() => goTo((current - 1 + SLIDES.length) % SLIDES.length), [current, goTo]);
