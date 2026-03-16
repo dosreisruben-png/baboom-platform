@@ -22,9 +22,8 @@ jobs:
     name: Deploy SA to Vercel
     runs-on: ubuntu-latest
     env:
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      # Vercel CLI requires the env var to be named VERCEL_PROJECT_ID.
-      # Its value comes from the GitHub secret VERCEL_PROJECT_ID_SA.
+      # VERCEL_PROJECT_ID is the env var name required by Vercel CLI.
+      # Its value is sourced from the GitHub secret VERCEL_PROJECT_ID_SA.
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_SA }}
     steps:
       - name: Checkout
@@ -47,26 +46,10 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
-      - name: Pull Vercel environment (production)
+      - name: Deploy to Vercel (production)
         if: github.ref_name == 'main'
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}
 
-      - name: Pull Vercel environment (preview)
+      - name: Deploy to Vercel (preview)
         if: github.ref_name != 'main'
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Build (production)
-        if: github.ref_name == 'main'
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Build (preview)
-        if: github.ref_name != 'main'
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Deploy (production)
-        if: github.ref_name == 'main'
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Deploy (preview)
-        if: github.ref_name != 'main'
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }}
