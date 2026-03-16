@@ -75,7 +75,7 @@ export const MOCK_PRODUCTS: Product[] = [
     "Professional 18V XR brushless motor for extended runtime and durability. 2-speed gearbox (0-550/0-2000 RPM), 13mm metal chuck, 15+1 torque settings. Kit includes 2×2.0Ah batteries and charger.",
     "2899.00",
     "3499.00",
-    ["power-tools", "drills", "featured", "dewalt"],
+    ["power-tools", "drills", "featured", "bestseller", "sale", "dewalt"],
     true,
     [{ title: "2×2.0Ah Kit" }, { title: "2×4.0Ah Kit" }, { title: "Bare Tool" }]
   ),
@@ -87,7 +87,7 @@ export const MOCK_PRODUCTS: Product[] = [
     "Heavy-duty 2200W motor for demanding cutting and grinding applications. 230mm disc diameter, vibration control, restart protection. Includes side handle and wheel guard.",
     "1649.00",
     undefined,
-    ["power-tools", "grinders", "bosch"],
+    ["power-tools", "grinders", "featured", "bestseller", "bosch"],
     true
   ),
   product(
@@ -98,7 +98,7 @@ export const MOCK_PRODUCTS: Product[] = [
     "3-mode operation: rotary, hammer, and rotation stop. 800W motor, 2.9J impact energy. Anti-vibration technology, built-in torque limiter for user safety. Includes carry case.",
     "3199.00",
     "3699.00",
-    ["power-tools", "hammer-drills", "makita", "featured"],
+    ["power-tools", "hammer-drills", "makita", "featured", "bestseller", "sale"],
     true
   ),
   product(
@@ -109,7 +109,7 @@ export const MOCK_PRODUCTS: Product[] = [
     "SABS-approved P100 respirator for protection against oil and non-oil based aerosols, dusts, mists and fumes. Quick-latch mechanism drops facepiece for breaks without removing. Medium size.",
     "489.00",
     "599.00",
-    ["safety-ppe", "respirators", "3m", "featured"],
+    ["safety-ppe", "respirators", "3m", "featured", "sale"],
     true,
     [{ title: "Small" }, { title: "Medium" }, { title: "Large" }]
   ),
@@ -132,7 +132,7 @@ export const MOCK_PRODUCTS: Product[] = [
     "24-piece metric socket set in blow mould case. 1/2\" drive sockets 10–32mm, reversible ratchet handle, extension bars 125mm and 250mm, universal joint. Chrome vanadium steel, mirror polished.",
     "1249.00",
     "1599.00",
-    ["hand-tools", "socket-sets", "gedore", "featured"],
+    ["hand-tools", "socket-sets", "gedore", "featured", "sale"],
     true
   ),
   product(
@@ -143,7 +143,7 @@ export const MOCK_PRODUCTS: Product[] = [
     "Lightweight wrap-around safety glasses with anti-scratch and anti-fog clear lens. Side shields integrated, adjustable temples, ANSI Z87.1 and EN166 certified. UV 400 protection.",
     "129.00",
     undefined,
-    ["safety-ppe", "eye-protection", "uvex"],
+    ["safety-ppe", "eye-protection", "bestseller", "uvex"],
     true
   ),
   product(
@@ -154,7 +154,7 @@ export const MOCK_PRODUCTS: Product[] = [
     "Blade Armor coated tape for up to 10× longer blade life. 3.8m standout, nylon bonded blade, magnetic tip, True Zero hook. Shock-resistant ABS case with rubber overmould grip.",
     "219.00",
     "269.00",
-    ["hand-tools", "measuring", "stanley"],
+    ["hand-tools", "measuring", "bestseller", "sale", "stanley"],
     true
   ),
   product(
@@ -177,7 +177,7 @@ export const MOCK_PRODUCTS: Product[] = [
     "True-RMS for accurate measurements on non-linear loads. VoltAlert non-contact voltage detection, AutoVolt automatic AC/DC selection, LoZ function eliminates ghost voltages. CAT III 600V.",
     "4299.00",
     "4999.00",
-    ["electrical", "test-equipment", "fluke", "featured"],
+    ["electrical", "test-equipment", "fluke", "featured", "sale"],
     true
   ),
   product(

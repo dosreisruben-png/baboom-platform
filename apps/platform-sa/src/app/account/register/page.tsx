@@ -50,7 +50,7 @@ export default function RegisterPage() {
       <div className="min-h-screen bg-brand-gray-50">
         <div className="bg-brand-black py-12">
           <div className="container-page">
-            <h1 className="text-4xl md:text-5xl font-black text-white uppercase">Create Account</h1>
+            <h1 className="text-center md:text-left text-4xl md:text-5xl font-black text-white uppercase">Create Account</h1>
           </div>
         </div>
         <div className="container-page py-12">
@@ -73,7 +73,7 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-brand-gray-50">
       <div className="bg-brand-black py-12">
         <div className="container-page">
-          <h1 className="text-4xl md:text-5xl font-black text-white uppercase">Create Account</h1>
+          <h1 className="text-center md:text-left text-4xl md:text-5xl font-black text-white uppercase">Create Account</h1>
         </div>
       </div>
 

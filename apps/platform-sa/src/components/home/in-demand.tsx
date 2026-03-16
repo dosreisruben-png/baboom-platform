@@ -74,7 +74,7 @@ export function InDemand({ products }: InDemandProps) {
     <section className="py-12 md:py-16 bg-white border-b border-brand-edge">
       <div className="container-page">
         <div className="flex items-end justify-between mb-6">
-          <h2 className="text-2xl md:text-3xl font-black">
+          <h2 className="text-2xl md:text-3xl font-black text-center md:text-left">
             <span className="text-brand-black">In Demand</span>{" "}
             <span className="text-brand-orange">This Week</span>
           </h2>

@@ -17,7 +17,7 @@ export default function BrandsPage() {
     <div className="min-h-screen">
       <div className="bg-brand-black py-12">
         <div className="container-page">
-          <h1 className="text-4xl md:text-5xl font-black text-white uppercase">Brands</h1>
+          <h1 className="text-center md:text-left text-4xl md:text-5xl font-black text-white uppercase">Brands</h1>
           <p className="text-brand-gray-400 mt-2">Genuine products from the world&apos;s leading manufacturers.</p>
         </div>
       </div>

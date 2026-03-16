@@ -42,7 +42,7 @@ export default function DeliveryPage() {
     <div className="min-h-screen">
       <div className="bg-brand-black py-12">
         <div className="container-page">
-          <h1 className="text-4xl md:text-5xl font-black text-white uppercase">Delivery &amp; Payment</h1>
+          <h1 className="text-center md:text-left text-4xl md:text-5xl font-black text-white uppercase">Delivery &amp; Payment</h1>
           <p className="text-brand-gray-400 mt-2">Everything you need to know about getting your order.</p>
         </div>
       </div>

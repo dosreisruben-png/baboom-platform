@@ -33,7 +33,7 @@ export function ExplorePromos() {
             <Link
               key={campaign.title}
               href={campaign.href}
-              className={`${campaign.bg} p-8 flex flex-col items-start justify-end min-h-[200px] group hover:scale-[1.02] transition-transform duration-300 relative overflow-hidden`}
+              className={`${campaign.bg} p-8 flex flex-col items-center md:items-start justify-end min-h-[200px] group hover:scale-[1.02] transition-transform duration-300 relative overflow-hidden text-center md:text-left`}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               <div className="relative z-10">

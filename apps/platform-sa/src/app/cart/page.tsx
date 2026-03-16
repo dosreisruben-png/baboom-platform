@@ -12,7 +12,7 @@ export default function CartPage() {
     <div className="min-h-screen">
       <div className="bg-brand-black py-10">
         <div className="container-page">
-          <h1 className="font-condensed font-black text-4xl text-white uppercase">
+          <h1 className="text-center md:text-left font-condensed font-black text-4xl text-white uppercase">
             Your Cart
           </h1>
         </div>

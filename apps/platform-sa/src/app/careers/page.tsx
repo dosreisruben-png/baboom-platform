@@ -38,7 +38,7 @@ export default function CareersPage() {
     <div className="min-h-screen">
       <div className="bg-brand-black py-12">
         <div className="container-page">
-          <h1 className="text-4xl md:text-5xl font-black text-white uppercase">Careers</h1>
+          <h1 className="text-center md:text-left text-4xl md:text-5xl font-black text-white uppercase">Careers</h1>
           <p className="text-brand-gray-400 mt-2">Build the future of industrial supply in South Africa.</p>
         </div>
       </div>

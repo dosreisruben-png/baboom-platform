@@ -14,7 +14,7 @@ export function B2BCallout() {
       <div className="container-page">
         <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           {/* Left */}
-          <div>
+          <div className="text-center md:text-left">
             <p className="text-brand-orange font-bold text-sm uppercase tracking-widest mb-3">
               For Businesses & Contractors
             </p>
@@ -22,10 +22,10 @@ export function B2BCallout() {
               Built For<br />
               <span className="text-brand-orange">B2B Buyers.</span>
             </h2>
-            <p className="text-brand-gray-400 leading-relaxed mb-5 md:mb-8 max-w-md">
+            <p className="text-brand-gray-400 leading-relaxed mb-5 md:mb-8 max-w-md mx-auto md:mx-0">
               Whether you&apos;re a sole trader, contractor, or large enterprise — Baboom SA has dedicated B2B tools to streamline your procurement. Bulk pricing, quote requests, and credit accounts all in one place.
             </p>
-            <div className="flex flex-col xs:flex-row gap-4">
+            <div className="flex flex-col xs:flex-row gap-4 items-center md:items-start">
               <Link href="/b2b" className="btn-primary">
                 Open B2B Account
               </Link>

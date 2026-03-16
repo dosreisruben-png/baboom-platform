@@ -84,7 +84,7 @@ export function SeasonalOffers() {
     <section className="py-12 md:py-16 bg-brand-gray-50 border-b border-brand-edge">
       <div className="container-page">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl md:text-3xl font-black text-brand-black">
+          <h2 className="text-2xl md:text-3xl font-black text-brand-black text-center md:text-left">
             Seasonal Offers <span className="text-brand-orange">Best Choice</span>
           </h2>
           <Link href="/products" className="hidden md:flex items-center gap-1 text-sm font-semibold text-brand-orange hover:underline">

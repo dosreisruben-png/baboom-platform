@@ -47,7 +47,7 @@ export default function B2BPage() {
             <p className="text-brand-orange font-bold text-sm uppercase tracking-widest mb-3">
               Business Accounts
             </p>
-            <h1 className="font-condensed font-black text-5xl md:text-6xl text-white uppercase leading-none mb-6">
+            <h1 className="text-center md:text-left font-condensed font-black text-5xl md:text-6xl text-white uppercase leading-none mb-6">
               B2B Portal
             </h1>
             <p className="text-brand-gray-400 text-lg leading-relaxed">

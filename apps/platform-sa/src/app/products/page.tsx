@@ -96,7 +96,7 @@ export default function ProductsPage({ searchParams }: ProductsPageProps) {
       {/* Page header */}
       <div className="bg-brand-black py-10">
         <div className="container-page">
-          <h1 className="font-condensed font-black text-4xl md:text-5xl text-white uppercase">
+          <h1 className="text-center md:text-left font-condensed font-black text-4xl md:text-5xl text-white uppercase">
             {searchParams.category ?? "All Products"}
           </h1>
           <p className="text-brand-gray-400 mt-2">

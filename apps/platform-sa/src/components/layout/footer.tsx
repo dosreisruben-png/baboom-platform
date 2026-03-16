@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin, Twitter, Clock, Plus, Minus } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin, Twitter, Clock, Plus, Minus, ShieldCheck, Truck, Award, CreditCard, Headphones } from "lucide-react";
+
+const MOBILE_TRUST_BADGES = [
+  { icon: ShieldCheck, title: "POPIA Compliant" },
+  { icon: Truck, title: "Nationwide Delivery" },
+  { icon: Award, title: "Genuine Products" },
+  { icon: CreditCard, title: "Secure Payment" },
+  { icon: Headphones, title: "SA-Based Support" },
+];
 
 const MY_ACCOUNT_LINKS = [
   { label: "Sign In", href: "/account" },
@@ -43,14 +51,14 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 md:gap-8">
 
           {/* Col 1: Brand — always visible */}
-          <div className="pb-6 md:pb-0 border-b border-gray-800 md:border-0">
+          <div className="pb-6 md:pb-0 border-b border-gray-800 md:border-0 text-center md:text-left">
             <Link href="/" className="block font-black text-3xl text-brand-orange uppercase mb-3 tracking-tight">
               BABOOM
             </Link>
             <p className="text-sm leading-relaxed mb-5 text-gray-400">
               South Africa&apos;s premier MRO and industrial supplies store. 19,000+ products for professionals and tradespeople.
             </p>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center md:justify-start gap-3">
               {[
                 { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
                 { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
@@ -67,6 +75,15 @@ export function Footer() {
                 >
                   <Icon size={16} />
                 </a>
+              ))}
+            </div>
+            {/* Mobile trust badges — shown only on mobile, above accordions */}
+            <div className="mt-5 md:hidden grid grid-cols-2 gap-2">
+              {MOBILE_TRUST_BADGES.map(({ icon: Icon, title }) => (
+                <div key={title} className="flex items-center gap-2 text-left">
+                  <Icon size={15} className="text-brand-orange flex-shrink-0" />
+                  <span className="text-xs text-gray-400">{title}</span>
+                </div>
               ))}
             </div>
           </div>

@@ -83,21 +83,8 @@ export function ProductCard({ product, className, badge }: ProductCardProps) {
           </div>
         )}
 
-        {/* Add to cart button — bottom right */}
-        <button
-          onClick={handleAddToCart}
-          disabled={!product.availableForSale}
-          className={cn(
-            "absolute bottom-2 right-2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-brand-orange text-white flex items-center justify-center shadow-lg hover:bg-brand-orange-dark transition-all disabled:opacity-40 disabled:cursor-not-allowed z-10",
-            cartPulse && "animate-pulse-once"
-          )}
-          aria-label="Add to cart"
-        >
-          <ShoppingCart size={14} />
-        </button>
-
         {/* Settings / configure icon */}
-        <button className="absolute bottom-2 right-12 w-9 h-9 rounded-full bg-white border border-brand-edge text-brand-gray-600 flex items-center justify-center hover:border-brand-orange hover:text-brand-orange transition-all opacity-0 group-hover:opacity-100 z-10">
+        <button className="absolute bottom-2 right-2 w-9 h-9 rounded-full bg-white border border-brand-edge text-brand-gray-600 flex items-center justify-center hover:border-brand-orange hover:text-brand-orange transition-all opacity-0 group-hover:opacity-100 z-10">
           <Settings size={14} />
         </button>
       </div>
@@ -135,7 +122,7 @@ export function ProductCard({ product, className, badge }: ProductCardProps) {
         </div>
 
         {/* Price */}
-        <div className="flex items-baseline gap-2 flex-wrap">
+        <div className="flex items-baseline gap-2 flex-wrap mb-2.5">
           <span className="text-base font-black text-brand-black">
             {formatMoney(product.priceRange.minVariantPrice)}
           </span>
@@ -150,6 +137,20 @@ export function ProductCard({ product, className, badge }: ProductCardProps) {
             </span>
           )}
         </div>
+
+        {/* Add to cart button */}
+        <button
+          onClick={handleAddToCart}
+          disabled={!product.availableForSale}
+          className={cn(
+            "w-full flex items-center justify-center gap-1.5 bg-brand-orange text-white text-xs font-bold py-2 rounded-sm hover:bg-brand-orange-dark transition-all disabled:opacity-40 disabled:cursor-not-allowed",
+            cartPulse && "animate-pulse-once"
+          )}
+          aria-label="Add to cart"
+        >
+          <ShoppingCart size={13} />
+          Add to Cart
+        </button>
       </div>
     </Link>
   );

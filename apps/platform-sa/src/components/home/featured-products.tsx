@@ -2,18 +2,32 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { getFeaturedProducts } from "@/lib/shopify/queries";
+import { getProducts } from "@/lib/shopify/queries";
 import { ProductCard, ProductCardSkeleton } from "@/components/product/product-card";
 import { isShopifyConfigured } from "@/lib/shopify/client";
 import { Suspense, useState } from "react";
+import type { Product } from "@/lib/shopify/types";
 
 const TABS = ["Most Popular", "Bestsellers", "On Sale"] as const;
 type Tab = typeof TABS[number];
 
-function ProductGridInner({ products }: { products: Awaited<ReturnType<typeof getFeaturedProducts>> }) {
+interface ProductGridInnerProps {
+  popular: Product[];
+  bestsellers: Product[];
+  onSale: Product[];
+}
+
+function ProductGridInner({ popular, bestsellers, onSale }: ProductGridInnerProps) {
   const [activeTab, setActiveTab] = useState<Tab>("Most Popular");
 
-  if (products.length === 0) {
+  const allEmpty = popular.length === 0 && bestsellers.length === 0 && onSale.length === 0;
+
+  const products =
+    activeTab === "Most Popular" ? popular :
+    activeTab === "Bestsellers" ? bestsellers :
+    onSale;
+
+  if (allEmpty) {
     return (
       <>
         <div className="flex gap-2 mb-6">
@@ -51,7 +65,9 @@ function ProductGridInner({ products }: { products: Awaited<ReturnType<typeof ge
           <ProductCard
             key={product.id}
             product={product}
-            {...(i === 0 ? { badge: "popular" as const } : i === 1 ? { badge: "new" as const } : {})}
+            {...(activeTab === "Most Popular" && i === 0 ? { badge: "popular" as const } : {})}
+            {...(activeTab === "Most Popular" && i === 1 ? { badge: "new" as const } : {})}
+            {...(activeTab === "On Sale" ? { badge: "sale" as const } : {})}
           />
         ))}
       </div>
@@ -60,8 +76,22 @@ function ProductGridInner({ products }: { products: Awaited<ReturnType<typeof ge
 }
 
 async function ProductGridServer() {
-  const products = await getFeaturedProducts(6);
-  return <ProductGridInner products={products} />;
+  const [popularRes, bestsellersRes, onSaleRes] = await Promise.all([
+    getProducts({ first: 6, query: "tag:featured", sortKey: "BEST_SELLING" }),
+    getProducts({ first: 6, query: "tag:bestseller", sortKey: "BEST_SELLING" }),
+    getProducts({ first: 6, query: "tag:sale", sortKey: "BEST_SELLING" }),
+  ]);
+
+  // Fallback: if a tab returns 0 products, use a slice of all products
+  const popular = popularRes.products;
+  const bestsellers = bestsellersRes.products.length > 0
+    ? bestsellersRes.products
+    : popular;
+  const onSale = onSaleRes.products.length > 0
+    ? onSaleRes.products
+    : popular.slice(0, 6).reverse();
+
+  return <ProductGridInner popular={popular} bestsellers={bestsellers} onSale={onSale} />;
 }
 
 export function FeaturedProducts() {
@@ -70,7 +100,7 @@ export function FeaturedProducts() {
       <div className="container-page">
         <div className="flex items-end justify-between mb-6">
           <div>
-            <h2 className="text-2xl md:text-3xl font-black text-brand-black">
+            <h2 className="text-2xl md:text-3xl font-black text-brand-black text-center md:text-left">
               You May Be <span className="text-brand-orange">Interested</span>
             </h2>
           </div>

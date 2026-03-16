@@ -21,7 +21,7 @@ export default function StoreLocatorPage() {
     <div className="min-h-screen">
       <div className="bg-brand-black py-12">
         <div className="container-page">
-          <h1 className="text-4xl md:text-5xl font-black text-white uppercase">Store Locator</h1>
+          <h1 className="text-center md:text-left text-4xl md:text-5xl font-black text-white uppercase">Store Locator</h1>
           <p className="text-brand-gray-400 mt-2">Find your nearest Baboom SA branch.</p>
         </div>
       </div>

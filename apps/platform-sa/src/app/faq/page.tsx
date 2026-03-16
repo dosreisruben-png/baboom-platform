@@ -78,7 +78,7 @@ export default function FAQPage() {
     <div className="min-h-screen">
       <div className="bg-brand-black py-14">
         <div className="container-page">
-          <h1 className="font-condensed font-black text-5xl text-white uppercase">FAQ</h1>
+          <h1 className="text-center md:text-left font-condensed font-black text-5xl text-white uppercase">FAQ</h1>
           <p className="text-brand-gray-400 mt-2">Frequently asked questions</p>
         </div>
       </div>

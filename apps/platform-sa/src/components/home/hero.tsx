@@ -101,9 +101,11 @@ export function Hero() {
           <p className="text-gray-300 text-lg md:text-xl mb-8 max-w-xl leading-relaxed">
             {slide.description}
           </p>
-          <Link href={slide.href} className="btn-primary-outline text-base px-8 py-4">
-            {slide.cta}
-          </Link>
+          <div className="flex justify-center md:justify-start">
+            <Link href={slide.href} className="btn-primary-outline text-base px-8 py-4">
+              {slide.cta}
+            </Link>
+          </div>
         </div>
       </div>
 

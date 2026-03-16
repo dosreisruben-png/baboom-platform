@@ -12,7 +12,7 @@ export default function WishlistPage() {
     <div className="min-h-screen">
       <div className="bg-brand-black py-12">
         <div className="container-page">
-          <h1 className="text-4xl md:text-5xl font-black text-white uppercase">Wishlist</h1>
+          <h1 className="text-center md:text-left text-4xl md:text-5xl font-black text-white uppercase">Wishlist</h1>
         </div>
       </div>
 

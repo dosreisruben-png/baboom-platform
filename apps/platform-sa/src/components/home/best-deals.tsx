@@ -59,7 +59,7 @@ export function BestDeals({ products }: BestDealsProps) {
       <div className="container-page">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left panel */}
-          <div className="flex flex-col justify-center">
+          <div className="flex flex-col justify-center items-center md:items-start text-center md:text-left">
             <p className="text-brand-orange font-bold text-sm uppercase tracking-widest mb-3">
               Limited Time
             </p>
@@ -81,7 +81,7 @@ export function BestDeals({ products }: BestDealsProps) {
               <TimeUnit value={countdown.seconds} label="Secs" />
             </div>
 
-            <div className="flex gap-3 flex-wrap">
+            <div className="flex gap-3 flex-wrap justify-center md:justify-start">
               <Link href="/products?sale=true" className="btn-primary text-sm px-6 py-3">
                 More
               </Link>

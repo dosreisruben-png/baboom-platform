@@ -10,7 +10,7 @@ export default function BlogPage() {
     <div className="min-h-screen">
       <div className="bg-brand-black py-12">
         <div className="container-page">
-          <h1 className="text-4xl md:text-5xl font-black text-white uppercase">Blog</h1>
+          <h1 className="text-center md:text-left text-4xl md:text-5xl font-black text-white uppercase">Blog</h1>
           <p className="text-brand-gray-400 mt-2">Tips, guides and industry news.</p>
         </div>
       </div>

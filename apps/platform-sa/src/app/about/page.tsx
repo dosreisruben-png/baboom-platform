@@ -10,7 +10,7 @@ export default function AboutPage() {
     <div className="min-h-screen">
       <div className="bg-brand-black py-14">
         <div className="container-page">
-          <h1 className="font-condensed font-black text-5xl text-white uppercase">About Us</h1>
+          <h1 className="text-center md:text-left font-condensed font-black text-5xl text-white uppercase">About Us</h1>
         </div>
       </div>
 
