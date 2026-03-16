@@ -18,7 +18,7 @@ const PRICE_RANGES = [
 
 interface FilterDrawerProps {
   activeCategory: string | undefined;
-  activePrice?: string;
+  activePrice?: string | undefined;
 }
 
 export function FilterDrawer({ activeCategory, activePrice }: FilterDrawerProps) {

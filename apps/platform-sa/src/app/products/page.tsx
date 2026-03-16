@@ -59,8 +59,14 @@ async function ProductResults({ searchParams }: ProductsPageProps) {
     .filter(Boolean)
     .join(" ");
 
-  const { minPrice, maxPrice } = parsePriceRange(searchParams.price);
-  const { products } = await getProducts({ first: 24, query, sortKey, minPrice, maxPrice });
+  const priceRange = parsePriceRange(searchParams.price);
+  const { products } = await getProducts({
+    first: 24,
+    query,
+    sortKey,
+    ...(priceRange.minPrice !== undefined && { minPrice: priceRange.minPrice }),
+    ...(priceRange.maxPrice !== undefined && { maxPrice: priceRange.maxPrice }),
+  });
 
   if (products.length === 0) {
     return (
