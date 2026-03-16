@@ -4,14 +4,14 @@ on:
   push:
     branches:
       - main      # → prod
-      - staging   # → staging
+      - staging   # → preview
   workflow_dispatch:
     inputs:
       environment:
         description: "Target environment"
         required: true
         type: choice
-        options: [dev, staging, prod]
+        options: [preview, prod]
 
 concurrency:
   group: deploy-pt-${{ github.ref_name }}
@@ -19,22 +19,11 @@ concurrency:
 
 jobs:
   deploy:
-    name: Deploy PT (${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'staging' && 'staging' || inputs.environment }})
+    name: Deploy PT to Vercel (${{ github.ref_name == 'main' && 'prod' || 'preview' }})
     runs-on: ubuntu-latest
-    environment:
-      name: ${{ github.ref_name == 'main' && 'pt-prod' || github.ref_name == 'staging' && 'pt-staging' || format('pt-{0}', inputs.environment) }}
-    permissions:
-      id-token: write
-      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Configure AWS credentials (eu-south-2)
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_PT_DEPLOY_ROLE_ARN }}
-          aws-region: eu-south-2
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
@@ -50,12 +39,26 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build PT platform
-        run: pnpm --filter @platform/pt build
-        env:
-          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+      - name: Install Vercel CLI
+        run: pnpm add -g vercel@latest
 
-      - name: Deploy to AWS (eu-south-2)
-        # TODO: Replace with actual deploy step once infra is defined (TRO-2/TRO-5)
-        run: echo "Deploy step TBD — depends on infra type (ECS, Lambda, App Runner, etc.)"
+      - name: Pull Vercel environment
+        run: vercel pull --yes --environment=${{ github.ref_name == 'main' && 'production' || 'preview' }} --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/platform-pt
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_PT }}
+
+      - name: Build PT platform
+        run: vercel build ${{ github.ref_name == 'main' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/platform-pt
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_PT }}
+
+      - name: Deploy to Vercel
+        run: vercel deploy --prebuilt ${{ github.ref_name == 'main' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/platform-pt
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_PT }}

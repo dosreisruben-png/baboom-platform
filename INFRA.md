@@ -20,17 +20,10 @@ platform/
 │   ├── ui/                   # Shared component library (TBD)
 │   └── database/             # Shared DB client/schema (TBD)
 ├── infra/
-│   └── terraform/
-│       ├── modules/          # Reusable Terraform modules
-│       │   ├── networking/
-│       │   └── secrets/
+│   └── terraform/            # AWS infra (for DB, secrets at scale — not compute)
+│       ├── modules/
+│       │   └── secrets/      # AWS Secrets Manager (optional future use)
 │       └── envs/
-│           ├── dev/sa/       # SA dev environment
-│           ├── dev/pt/       # PT dev environment
-│           ├── staging/sa/   # SA staging environment
-│           ├── staging/pt/   # PT staging environment
-│           ├── prod/sa/      # SA production
-│           └── prod/pt/      # PT production
 └── .github/workflows/        # CI/CD pipelines
 ```
 
@@ -46,7 +39,7 @@ platform/
 | Runtime            | Node.js 20 LTS                   | Engine pinned in package.json         |
 | Framework          | **TBD** (pending TRO-2)          | Next.js or similar, decided post-TRO-2|
 | Database           | **TBD** (pending TRO-2)          | PostgreSQL likely candidate           |
-| IaC                | Terraform 1.7+                   | HCL, modular                          |
+| Hosting            | **Vercel**                       | Both platforms; AWS revisited at scale|
 | CI/CD              | GitHub Actions                   | Branch-based promotions               |
 | Linting            | ESLint + @typescript-eslint      | Shared config in `packages/config`    |
 | Formatting         | Prettier                         | Auto-fixed in pre-commit hook         |
@@ -55,24 +48,26 @@ platform/
 
 ---
 
-## Cloud & Regions
+## Hosting — Vercel
 
-| Platform | Region          | Location       | Compliance   |
-| -------- | --------------- | -------------- | ------------ |
-| SA       | `af-south-1`    | Cape Town, SA  | POPIA        |
-| PT       | `eu-south-2`    | Spain (EU)     | GDPR         |
+Both platforms deploy to Vercel. AWS compute (ECS, Lambda, App Runner) is deferred until scale requires it.
 
-**Data residency:** Production data stays within its regional boundary. No cross-region replication of personal data.
+| Platform | Vercel Project | Environment               |
+| -------- | -------------- | ------------------------- |
+| SA       | `baboom-sa`    | Production (main), Preview (staging) |
+| PT       | `baboom-pt`    | Production (main), Preview (staging) |
+
+**Note on data residency:** Vercel's edge network is global. For POPIA (SA) and GDPR (PT) compliance at scale, regional data storage (database, object storage) will need to be revisited. For MVP, Vercel's DPA covers GDPR adequately.
 
 ---
 
 ## Environments
 
-| Environment | Branch    | Deploy trigger       | Notes                     |
-| ----------- | --------- | -------------------- | ------------------------- |
-| `dev`       | feature/* | Manual / local       | Per-engineer local dev    |
-| `staging`   | staging   | Push to `staging`    | Pre-prod integration test |
-| `prod`      | main      | Push to `main`       | Requires passing CI       |
+| Environment | Branch    | Deploy trigger       | Notes                         |
+| ----------- | --------- | -------------------- | ----------------------------- |
+| `dev`       | feature/* | Manual / local       | Per-engineer local dev        |
+| `preview`   | staging   | Push to `staging`    | Vercel preview deployment     |
+| `prod`      | main      | Push to `main`       | Vercel production deployment  |
 
 ---
 
@@ -83,12 +78,26 @@ Pipeline: `.github/workflows/`
 - **`ci.yml`** — runs on all PRs and pushes to `main`/`staging`
   - lint → typecheck → test → build
   - Uses Turborepo remote cache (set `TURBO_TOKEN` + `TURBO_TEAM` in GitHub vars)
-- **`deploy-sa.yml`** — deploys SA platform (region: `af-south-1`)
-- **`deploy-pt.yml`** — deploys PT platform (region: `eu-south-2`)
+- **`deploy-sa.yml`** — deploys SA platform to Vercel project `baboom-sa`
+- **`deploy-pt.yml`** — deploys PT platform to Vercel project `baboom-pt`
 
-Deploy steps use **OIDC** (no static AWS keys). Configure in AWS IAM:
-- `AWS_SA_DEPLOY_ROLE_ARN` secret → GitHub OIDC federated role for SA
-- `AWS_PT_DEPLOY_ROLE_ARN` secret → GitHub OIDC federated role for PT
+### Required GitHub Secrets
+
+| Secret                  | Description                            |
+| ----------------------- | -------------------------------------- |
+| `VERCEL_TOKEN`          | Vercel personal access token           |
+| `VERCEL_ORG_ID`         | Vercel team/org ID                     |
+| `VERCEL_PROJECT_ID_SA`  | Vercel project ID for `baboom-sa`      |
+| `VERCEL_PROJECT_ID_PT`  | Vercel project ID for `baboom-pt`      |
+| `TURBO_TOKEN`           | Turborepo remote cache token (optional)|
+
+### Finding your Vercel IDs
+
+```bash
+# Install Vercel CLI and link each app
+cd apps/platform-sa && vercel link  # creates .vercel/project.json with projectId + orgId
+cd apps/platform-pt && vercel link
+```
 
 ---
 
@@ -97,17 +106,10 @@ Deploy steps use **OIDC** (no static AWS keys). Configure in AWS IAM:
 | Environment | Mechanism                    |
 | ----------- | ---------------------------- |
 | Local dev   | `.env.local` (gitignored)    |
-| CI          | GitHub Actions Secrets       |
-| Staging     | AWS Secrets Manager          |
-| Production  | AWS Secrets Manager          |
+| CI/Deploy   | GitHub Actions Secrets       |
+| Production  | Vercel Environment Variables |
 
-Secret naming convention in AWS Secrets Manager:
-```
-/platform-{sa|pt}/{environment}/{secret-name}
-# e.g. /platform-sa/prod/database-password
-```
-
-Terraform provisions secret placeholders; values are set manually or via deployment pipelines — never in code.
+Set production secrets in the Vercel dashboard under each project → Settings → Environment Variables. These are injected at build/runtime automatically.
 
 ---
 
@@ -117,8 +119,7 @@ The following require product type confirmation before being finalized:
 
 - [ ] Frontend framework (Next.js vs Remix vs other — depends on product type)
 - [ ] Database engine + ORM (PostgreSQL + Drizzle/Prisma, or NoSQL)
-- [ ] Compute type (ECS Fargate vs Lambda vs App Runner — depends on workload shape)
-- [ ] Auth provider (Cognito, Auth0, self-hosted — depends on compliance needs)
+- [ ] Auth provider (Clerk, Auth0, NextAuth — depends on compliance needs)
 - [ ] Test runner (Vitest vs Jest — minor, can decide now if needed)
 - [ ] Shared UI component library (needed only if both platforms share UI)
 
@@ -126,19 +127,19 @@ The following require product type confirmation before being finalized:
 
 ## First-Time Setup Checklist
 
-### AWS accounts
-- [ ] Create separate AWS accounts for SA (af-south-1) and PT (eu-south-2) or use a single org with separate accounts per region
-- [ ] Bootstrap Terraform state: S3 buckets + DynamoDB tables per region
-  - SA: bucket `platform-tfstate-sa` in `af-south-1`
-  - PT: bucket `platform-tfstate-pt` in `eu-south-2`
-- [ ] Create GitHub OIDC IAM roles for CI/CD deploys
-- [ ] Add `AWS_SA_DEPLOY_ROLE_ARN` and `AWS_PT_DEPLOY_ROLE_ARN` to GitHub secrets
+### Vercel
+- [x] Board has existing Vercel account
+- [ ] Create project `baboom-sa` in Vercel dashboard, link to `apps/platform-sa`
+- [ ] Create project `baboom-pt` in Vercel dashboard, link to `apps/platform-pt`
+- [ ] Get `VERCEL_TOKEN` from Vercel → Account Settings → Tokens
+- [ ] Get `VERCEL_ORG_ID` from Vercel → Team Settings → General
+- [ ] Get `VERCEL_PROJECT_ID_SA` and `VERCEL_PROJECT_ID_PT` via `vercel link` in each app dir
 
 ### GitHub
-- [ ] Create repository, push this monorepo
+- [x] Repo created: https://github.com/dosreisruben-png/baboom-platform
+- [ ] Add all Vercel secrets to GitHub repo → Settings → Secrets and variables → Actions
 - [ ] Enable branch protection on `main` and `staging` (require CI pass + review)
 - [ ] Set `TURBO_TOKEN` and `TURBO_TEAM` variables for remote caching (optional but recommended)
-- [ ] Configure GitHub Environments: `sa-prod`, `sa-staging`, `pt-prod`, `pt-staging`
 
 ### Local dev
 - [ ] Install pnpm: `npm install -g pnpm@9`
