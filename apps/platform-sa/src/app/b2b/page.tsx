@@ -1,11 +1,8 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { Building2, FileText, Percent, Headphones, CheckCircle } from "lucide-react";
-
-export const metadata: Metadata = {
-  title: "B2B Account Portal",
-  description: "Open a Baboom SA B2B account for bulk pricing, quote requests, and credit terms.",
-};
 
 const BENEFITS = [
   "Volume discounts from 5 units",
@@ -19,6 +16,28 @@ const BENEFITS = [
 ];
 
 export default function B2BPage() {
+  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    company: "",
+    regNumber: "",
+    email: "",
+    phone: "",
+    spend: "",
+    products: "",
+  });
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    // TODO: submit to backend
+    setSubmitted(true);
+  }
+
   return (
     <div className="min-h-screen">
       {/* Hero */}
@@ -75,69 +94,68 @@ export default function B2BPage() {
             <h2 className="section-title mb-8">
               Apply <span className="section-title-accent">Now.</span>
             </h2>
-            <form className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">
-                    First Name *
-                  </label>
-                  <input type="text" className="input-field" required />
+
+            {submitted ? (
+              <div className="flex flex-col items-center justify-center py-16 text-center border border-brand-edge">
+                <CheckCircle size={48} className="text-brand-green mb-4" />
+                <h3 className="font-black text-xl text-brand-black mb-2">Application Submitted!</h3>
+                <p className="text-brand-gray-600 text-sm mb-2">
+                  Thank you for applying. Our team will review your application and get back to you within 1 business day.
+                </p>
+                <p className="text-brand-gray-400 text-xs">
+                  Check your inbox at <strong>{form.email}</strong> for confirmation.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">First Name *</label>
+                    <input type="text" name="firstName" value={form.firstName} onChange={handleChange} className="input-field" required />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Last Name *</label>
+                    <input type="text" name="lastName" value={form.lastName} onChange={handleChange} className="input-field" required />
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">
-                    Last Name *
-                  </label>
-                  <input type="text" className="input-field" required />
+                  <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Company Name *</label>
+                  <input type="text" name="company" value={form.company} onChange={handleChange} className="input-field" required />
                 </div>
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">
-                  Company Name *
-                </label>
-                <input type="text" className="input-field" required />
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">
-                  Company Registration / Tax Number
-                </label>
-                <input type="text" className="input-field" />
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">
-                  Business Email *
-                </label>
-                <input type="email" className="input-field" required />
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">
-                  Phone Number *
-                </label>
-                <input type="tel" className="input-field" required />
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">
-                  Monthly Spend Estimate
-                </label>
-                <select className="input-field">
-                  <option>Under R10,000/month</option>
-                  <option>R10,000 – R50,000/month</option>
-                  <option>R50,000 – R200,000/month</option>
-                  <option>R200,000+/month</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">
-                  What do you primarily buy?
-                </label>
-                <textarea className="input-field h-24 resize-none" placeholder="e.g. Power tools, safety equipment, electrical supplies..." />
-              </div>
-              <button type="submit" className="btn-primary w-full py-4">
-                Submit B2B Application
-              </button>
-              <p className="text-xs text-brand-gray-400 text-center">
-                We&apos;ll review your application and get back to you within 1 business day.
-              </p>
-            </form>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Company Registration / Tax Number</label>
+                  <input type="text" name="regNumber" value={form.regNumber} onChange={handleChange} className="input-field" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Business Email *</label>
+                  <input type="email" name="email" value={form.email} onChange={handleChange} className="input-field" required />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Phone Number *</label>
+                  <input type="tel" name="phone" value={form.phone} onChange={handleChange} className="input-field" required />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Monthly Spend Estimate</label>
+                  <select name="spend" value={form.spend} onChange={handleChange} className="input-field">
+                    <option value="">Select range...</option>
+                    <option>Under R10,000/month</option>
+                    <option>R10,000 – R50,000/month</option>
+                    <option>R50,000 – R200,000/month</option>
+                    <option>R200,000+/month</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">What do you primarily buy?</label>
+                  <textarea name="products" value={form.products} onChange={handleChange} className="input-field h-24 resize-none" placeholder="e.g. Power tools, safety equipment, electrical supplies..." />
+                </div>
+                <button type="submit" className="btn-primary w-full py-4">
+                  Submit B2B Application
+                </button>
+                <p className="text-xs text-brand-gray-400 text-center">
+                  We&apos;ll review your application and get back to you within 1 business day.
+                </p>
+              </form>
+            )}
           </div>
         </div>
       </div>
@@ -146,7 +164,10 @@ export default function B2BPage() {
       <div className="bg-brand-gray-50 border-t border-brand-gray-200 py-10">
         <div className="container-page text-center">
           <p className="text-brand-gray-600 mb-4">
-            Already have an account? <Link href="/b2b/quotes" className="text-brand-orange font-bold hover:underline">Submit a quote request →</Link>
+            Already have an account?{" "}
+            <Link href="/contact" className="text-brand-orange font-bold hover:underline">
+              Submit a quote request →
+            </Link>
           </p>
         </div>
       </div>

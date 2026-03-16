@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Plus } from "lucide-react";
+import { ArrowRight, Plus, Wrench } from "lucide-react";
 import { getFeaturedProducts } from "@/lib/shopify/queries";
 import { formatMoney } from "@/lib/utils";
 import { Suspense } from "react";
@@ -18,7 +18,7 @@ async function SeasonalContent() {
         {featured ? (
           <>
             <div className="flex-1 bg-brand-gray-50 rounded-sm flex items-center justify-center p-6 mb-4 min-h-[200px]">
-              <span className="font-black text-5xl text-brand-gray-200">B</span>
+              <Wrench size={40} className="text-brand-gray-300" />
             </div>
             <h3 className="font-bold text-sm text-brand-black mb-1 line-clamp-2">{featured.title}</h3>
             <p className="text-brand-orange font-black text-lg">{formatMoney(featured.priceRange.minVariantPrice)}</p>
@@ -38,7 +38,7 @@ async function SeasonalContent() {
         {centre ? (
           <>
             <div className="w-full bg-brand-gray-50 rounded-sm flex items-center justify-center p-8 mb-4 flex-1">
-              <span className="font-black text-6xl text-brand-gray-200">B</span>
+              <Wrench size={48} className="text-brand-gray-300" />
             </div>
             <h3 className="font-bold text-base text-brand-black mb-1 text-center line-clamp-2">{centre.title}</h3>
             <p className="text-brand-orange font-black text-xl">{formatMoney(centre.priceRange.minVariantPrice)}</p>
@@ -53,7 +53,7 @@ async function SeasonalContent() {
         {sideItems.length > 0 ? sideItems.map((product) => (
           <Link key={product.id} href={`/products/${product.handle}`} className="flex items-center gap-3 p-3 hover:bg-brand-gray-50 transition-colors group">
             <div className="w-16 h-16 bg-brand-gray-50 flex-shrink-0 flex items-center justify-center">
-              <span className="font-black text-xl text-brand-gray-200">B</span>
+              <Wrench size={20} className="text-brand-gray-300" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-semibold text-brand-black line-clamp-2 group-hover:text-brand-orange transition-colors">{product.title}</p>

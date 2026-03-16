@@ -29,7 +29,7 @@ export function B2BCallout() {
               <Link href="/b2b" className="btn-primary">
                 Open B2B Account
               </Link>
-              <Link href="/contact" className="btn-outline border-brand-gray-600 text-brand-gray-400 hover:border-brand-orange hover:text-white hover:bg-transparent">
+              <Link href="/contact" className="btn-outline-white">
                 Request a Quote
               </Link>
             </div>

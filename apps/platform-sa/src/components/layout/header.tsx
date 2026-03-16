@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   MapPin,
   Phone,
@@ -13,7 +14,6 @@ import {
   X,
   Grid,
   ChevronRight,
-  ChevronDown,
   Wrench,
   Zap,
   Scissors,
@@ -44,9 +44,11 @@ const CATEGORIES = [
 ];
 
 export function Header() {
+  const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 10);
@@ -58,6 +60,16 @@ export function Header() {
     document.body.style.overflow = drawerOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [drawerOpen]);
+
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
+    const q = searchQuery.trim();
+    if (q) {
+      router.push(`/products?q=${encodeURIComponent(q)}`);
+      setSearchQuery("");
+      setMobileSearchOpen(false);
+    }
+  }
 
   return (
     <>
@@ -79,9 +91,9 @@ export function Header() {
                 {l.label}
               </Link>
             ))}
-            <button className="flex items-center gap-1 hover:text-brand-orange transition-colors">
-              Information <ChevronDown size={10} />
-            </button>
+            <Link href="/delivery" className="flex items-center gap-1 hover:text-brand-orange transition-colors">
+              Information
+            </Link>
           </div>
           <div className="flex items-center gap-3">
             <span className="font-semibold text-brand-black">ZAR</span>
@@ -109,13 +121,16 @@ export function Header() {
           </Link>
 
           {/* Categories pill */}
-          <button className="hidden lg:flex items-center gap-2 bg-brand-orange text-white font-bold text-sm px-4 py-2 rounded-full whitespace-nowrap hover:bg-brand-orange-dark transition-colors ml-1">
+          <button
+            onClick={() => setDrawerOpen(true)}
+            className="hidden lg:flex items-center gap-2 bg-brand-orange text-white font-bold text-sm px-4 py-2 rounded-full whitespace-nowrap hover:bg-brand-orange-dark transition-colors ml-1"
+          >
             <Grid size={15} />
             Categories
           </button>
 
           {/* Search */}
-          <div className="hidden md:flex flex-1 relative mx-2">
+          <form onSubmit={handleSearch} className="hidden md:flex flex-1 relative mx-2">
             <input
               type="text"
               placeholder="Search 19,000+ products..."
@@ -123,13 +138,17 @@ export function Header() {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full border border-brand-edge px-4 py-2.5 pr-12 text-sm focus:outline-none focus:border-brand-orange transition-colors rounded-sm"
             />
-            <button className="absolute right-0 top-0 h-full px-4 bg-brand-orange text-white hover:bg-brand-orange-dark transition-colors rounded-sm">
+            <button type="submit" className="absolute right-0 top-0 h-full px-4 bg-brand-orange text-white hover:bg-brand-orange-dark transition-colors rounded-sm">
               <Search size={17} />
             </button>
-          </div>
+          </form>
 
           {/* Mobile search icon */}
-          <button className="md:hidden ml-auto p-2 hover:text-brand-orange transition-colors" aria-label="Search">
+          <button
+            onClick={() => setMobileSearchOpen((v) => !v)}
+            className="md:hidden ml-auto p-2 hover:text-brand-orange transition-colors"
+            aria-label="Search"
+          >
             <Search size={22} />
           </button>
 
@@ -147,12 +166,28 @@ export function Header() {
             </Link>
             <Link href="/cart" className="p-2 hover:text-brand-orange transition-colors relative" aria-label="Cart">
               <ShoppingCart size={20} />
-              <span className="absolute -top-0.5 -right-0.5 bg-brand-orange text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                0
-              </span>
             </Link>
           </div>
         </div>
+
+        {/* Mobile search bar */}
+        {mobileSearchOpen && (
+          <div className="md:hidden border-t border-brand-edge px-4 py-3">
+            <form onSubmit={handleSearch} className="flex gap-0">
+              <input
+                type="text"
+                placeholder="Search 19,000+ products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                autoFocus
+                className="flex-1 border border-brand-edge px-3 py-2.5 text-sm focus:outline-none focus:border-brand-orange transition-colors"
+              />
+              <button type="submit" className="px-4 bg-brand-orange text-white hover:bg-brand-orange-dark transition-colors">
+                <Search size={16} />
+              </button>
+            </form>
+          </div>
+        )}
       </header>
 
       {/* ── Hamburger Drawer ─────────────────────────────── */}
@@ -203,17 +238,18 @@ export function Header() {
             {/* Drawer footer */}
             <div className="border-t border-brand-edge bg-brand-gray-50 px-5 py-4 flex-shrink-0">
               <div className="grid grid-cols-2 gap-2 text-xs text-brand-gray-600">
-                {[
-                  { icon: MapPin, label: "Johannesburg" },
-                  { icon: Shield, label: "Returns Policy" },
-                  { icon: Zap, label: "Delivery Info" },
-                  { icon: Settings, label: "Languages" },
-                ].map(({ icon: Icon, label }) => (
-                  <button key={label} className="flex items-center gap-1.5 hover:text-brand-orange transition-colors py-1">
-                    <Icon size={12} />
-                    {label}
-                  </button>
-                ))}
+                <Link href="/store-locator" onClick={() => setDrawerOpen(false)} className="flex items-center gap-1.5 hover:text-brand-orange transition-colors py-1">
+                  <MapPin size={12} /> Johannesburg
+                </Link>
+                <Link href="/returns" onClick={() => setDrawerOpen(false)} className="flex items-center gap-1.5 hover:text-brand-orange transition-colors py-1">
+                  <Shield size={12} /> Returns Policy
+                </Link>
+                <Link href="/delivery" onClick={() => setDrawerOpen(false)} className="flex items-center gap-1.5 hover:text-brand-orange transition-colors py-1">
+                  <Zap size={12} /> Delivery Info
+                </Link>
+                <Link href="/contact" onClick={() => setDrawerOpen(false)} className="flex items-center gap-1.5 hover:text-brand-orange transition-colors py-1">
+                  <Settings size={12} /> Contact Us
+                </Link>
               </div>
             </div>
           </div>

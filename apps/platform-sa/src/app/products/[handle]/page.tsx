@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { getProduct, getProducts } from "@/lib/shopify/queries";
 import { formatMoney, getDiscountPercentage } from "@/lib/utils";
-import { ShoppingCart, Zap, Truck, ShieldCheck, RotateCcw, ChevronRight, Star, Copy } from "lucide-react";
+import { Truck, ShieldCheck, RotateCcw, ChevronRight, Star } from "lucide-react";
+import { ProductImages } from "@/components/product/product-images";
+import { ProductActions } from "@/components/product/product-actions";
 
 interface ProductPageProps {
   params: { handle: string };
@@ -68,48 +69,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <div className="container-page py-8 md:py-12">
         <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
           {/* ── Images ────────────────────────────────────── */}
-          <div>
-            <div className="relative aspect-square bg-brand-gray-50 border border-brand-edge overflow-hidden mb-3">
-              {product.featuredImage ? (
-                <Image
-                  src={product.featuredImage.url}
-                  alt={product.featuredImage.altText ?? product.title}
-                  fill
-                  className="object-contain p-8"
-                  priority
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              ) : (
-                <div className="absolute inset-0 bg-[#F0F0F0] flex items-center justify-center">
-                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#CCCCCC" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-                  </svg>
-                </div>
-              )}
-              {discount && (
-                <span className="absolute top-4 left-4 badge-discount text-sm px-3 py-1">
-                  -{discount}% OFF
-                </span>
-              )}
-            </div>
-
-            {/* Thumbnail strip */}
-            {product.images.nodes.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-                {product.images.nodes.slice(0, 6).map((img, i) => (
-                  <div key={i} className="relative w-16 h-16 flex-shrink-0 border-2 border-brand-edge hover:border-brand-orange transition-colors cursor-pointer bg-brand-gray-50">
-                    <Image
-                      src={img.url}
-                      alt={img.altText ?? `${product.title} ${i + 1}`}
-                      fill
-                      className="object-contain p-1"
-                      sizes="64px"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <ProductImages
+            featuredImage={product.featuredImage}
+            images={product.images.nodes}
+            title={product.title}
+            discount={discount}
+          />
 
           {/* ── Details ───────────────────────────────────── */}
           <div>
@@ -122,14 +87,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <h1 className="text-2xl md:text-3xl font-black text-brand-black leading-tight mb-2">
               {product.title}
             </h1>
-
-            {/* SKU */}
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-xs text-brand-gray-400">SKU: <strong className="text-brand-black">{sku}</strong></span>
-              <button className="text-brand-gray-400 hover:text-brand-orange transition-colors" aria-label="Copy SKU">
-                <Copy size={12} />
-              </button>
-            </div>
 
             {/* Rating */}
             <StarRow />
@@ -166,45 +123,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <span className="text-brand-black text-xs">Ends in 2 days — order now to lock in this price</span>
             </div>
 
-            {/* Variants */}
-            {product.variants.nodes.length > 1 && (
-              <div className="mb-5">
-                <p className="text-xs font-bold uppercase tracking-widest text-brand-gray-400 mb-3">Options</p>
-                <div className="flex flex-wrap gap-2">
-                  {product.variants.nodes.map((variant) => (
-                    <button
-                      key={variant.id}
-                      className="border-2 border-brand-edge px-3 py-1.5 text-sm font-semibold hover:border-brand-orange transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                      disabled={!variant.availableForSale}
-                    >
-                      {variant.title}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Quantity + CTA */}
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex items-center border-2 border-brand-edge">
-                <button className="px-3 py-3 font-bold hover:bg-brand-gray-50 transition-colors text-lg leading-none">−</button>
-                <span className="px-5 py-3 font-bold min-w-[48px] text-center">1</span>
-                <button className="px-3 py-3 font-bold hover:bg-brand-gray-50 transition-colors text-lg leading-none">+</button>
-              </div>
-              <button
-                className="flex-1 btn-primary text-sm py-3.5 gap-2 disabled:opacity-50"
-                disabled={!product.availableForSale}
-              >
-                <ShoppingCart size={17} />
-                {product.availableForSale ? "Add to Cart" : "Out of Stock"}
-              </button>
-            </div>
-
-            {/* Buy now */}
-            <button className="w-full btn-outline text-sm py-3 mb-5" disabled={!product.availableForSale}>
-              <Zap size={16} />
-              Buy Now
-            </button>
+            {/* Interactive: SKU copy, variants, qty, CTA */}
+            <ProductActions product={product} sku={sku} />
 
             {/* Trust badges */}
             <div className="grid grid-cols-3 gap-3 text-center text-xs text-brand-gray-400 border-t border-brand-edge pt-5">

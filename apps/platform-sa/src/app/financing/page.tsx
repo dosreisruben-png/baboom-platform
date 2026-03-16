@@ -1,10 +1,7 @@
-import type { Metadata } from "next";
-import { GraduationCap, CheckCircle, Clock, AlertCircle } from "lucide-react";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Student Financing",
-  description: "Get the tools you need to start your trade career with affordable student financing.",
-};
+import { useState } from "react";
+import { GraduationCap, CheckCircle, Clock, AlertCircle } from "lucide-react";
 
 const HOW_IT_WORKS = [
   { step: "01", title: "Browse Products", desc: "Select the tools and equipment you need for your trade qualification." },
@@ -14,6 +11,32 @@ const HOW_IT_WORKS = [
 ];
 
 export default function FinancingPage() {
+  const [submitted, setSubmitted] = useState(false);
+  const [email, setEmail] = useState("");
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    phone: "",
+    institution: "",
+    trade: "",
+    budget: "",
+    consent: false,
+  });
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+    const { name, value, type } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
+    }));
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    // TODO: submit to backend
+    setSubmitted(true);
+  }
+
   return (
     <div className="min-h-screen">
       {/* Hero */}
@@ -94,55 +117,65 @@ export default function FinancingPage() {
             <h2 className="section-title mb-8">
               Register <span className="section-title-accent">Interest.</span>
             </h2>
-            <form className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">First Name *</label>
-                  <input type="text" className="input-field" required />
+
+            {submitted ? (
+              <div className="flex flex-col items-center justify-center py-16 text-center border border-brand-edge">
+                <CheckCircle size={48} className="text-brand-green mb-4" />
+                <h3 className="font-black text-xl text-brand-black mb-2">Interest Registered!</h3>
+                <p className="text-brand-gray-600 text-sm">
+                  We&apos;ll notify you as soon as our student financing programme launches.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">First Name *</label>
+                    <input type="text" name="firstName" value={form.firstName} onChange={handleChange} className="input-field" required />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Last Name *</label>
+                    <input type="text" name="lastName" value={form.lastName} onChange={handleChange} className="input-field" required />
+                  </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Last Name *</label>
-                  <input type="text" className="input-field" required />
+                  <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Email Address *</label>
+                  <input type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input-field" required />
                 </div>
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Email Address *</label>
-                <input type="email" className="input-field" required />
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Phone Number</label>
-                <input type="tel" className="input-field" />
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Institution / Employer</label>
-                <input type="text" className="input-field" placeholder="e.g. Ekurhuleni TVET College" />
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Trade / Programme</label>
-                <input type="text" className="input-field" placeholder="e.g. Electrician, Plumber, Welder" />
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">
-                  Estimated tool budget needed
-                </label>
-                <select className="input-field">
-                  <option>Under R5,000</option>
-                  <option>R5,000 – R15,000</option>
-                  <option>R15,000 – R30,000</option>
-                  <option>R30,000+</option>
-                </select>
-              </div>
-              <div className="flex items-start gap-2">
-                <input type="checkbox" id="consent" className="accent-brand-orange mt-1" required />
-                <label htmlFor="consent" className="text-xs text-brand-gray-600 cursor-pointer">
-                  I agree to be contacted by Baboom SA and its financing partners regarding the student financing programme. I understand this is an expression of interest, not a credit application.
-                </label>
-              </div>
-              <button type="submit" className="btn-primary w-full py-4">
-                <Clock size={16} />
-                Register My Interest
-              </button>
-            </form>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Phone Number</label>
+                  <input type="tel" name="phone" value={form.phone} onChange={handleChange} className="input-field" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Institution / Employer</label>
+                  <input type="text" name="institution" value={form.institution} onChange={handleChange} className="input-field" placeholder="e.g. Ekurhuleni TVET College" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Trade / Programme</label>
+                  <input type="text" name="trade" value={form.trade} onChange={handleChange} className="input-field" placeholder="e.g. Electrician, Plumber, Welder" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wide mb-1.5">Estimated tool budget needed</label>
+                  <select name="budget" value={form.budget} onChange={handleChange} className="input-field">
+                    <option value="">Select range...</option>
+                    <option>Under R5,000</option>
+                    <option>R5,000 – R15,000</option>
+                    <option>R15,000 – R30,000</option>
+                    <option>R30,000+</option>
+                  </select>
+                </div>
+                <div className="flex items-start gap-2">
+                  <input type="checkbox" id="consent" name="consent" checked={form.consent} onChange={handleChange} className="accent-brand-orange mt-1" required />
+                  <label htmlFor="consent" className="text-xs text-brand-gray-600 cursor-pointer">
+                    I agree to be contacted by Baboom SA and its financing partners regarding the student financing programme. I understand this is an expression of interest, not a credit application.
+                  </label>
+                </div>
+                <button type="submit" className="btn-primary w-full py-4">
+                  <Clock size={16} />
+                  Register My Interest
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </div>

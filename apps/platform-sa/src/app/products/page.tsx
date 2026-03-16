@@ -4,19 +4,12 @@ import { ProductCard, ProductCardSkeleton } from "@/components/product/product-c
 import { Suspense } from "react";
 import { SlidersHorizontal } from "lucide-react";
 import { FilterDrawer } from "@/components/products/filter-drawer";
+import { SortSelect } from "./sort-select";
 
 export const metadata: Metadata = {
   title: "Products",
   description: "Browse 19,000+ industrial and hardware products. Filter by category, brand, and price.",
 };
-
-const SORT_OPTIONS = [
-  { label: "Best Selling", value: "BEST_SELLING" },
-  { label: "Price: Low to High", value: "PRICE_ASC" },
-  { label: "Price: High to Low", value: "PRICE_DESC" },
-  { label: "Newest", value: "CREATED_AT" },
-  { label: "Relevance", value: "RELEVANCE" },
-];
 
 const CATEGORIES = [
   "All",
@@ -159,16 +152,9 @@ export default function ProductsPage({ searchParams }: ProductsPageProps) {
                   <span className="font-bold text-brand-black"> for &ldquo;{searchParams.q}&rdquo;</span>
                 )}
               </p>
-              <select
-                className="text-sm border border-brand-gray-200 px-3 py-2 focus:outline-none focus:border-brand-orange"
-                defaultValue={searchParams.sort ?? "BEST_SELLING"}
-              >
-                {SORT_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
+              <Suspense fallback={<div className="text-sm border border-brand-gray-200 px-3 py-2 min-w-[160px] h-[38px] bg-brand-gray-50 animate-pulse" />}>
+                <SortSelect currentSort={searchParams.sort ?? "BEST_SELLING"} />
+              </Suspense>
             </div>
 
             <FilterDrawer activeCategory={searchParams.category} />

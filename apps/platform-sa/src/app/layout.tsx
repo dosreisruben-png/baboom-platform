@@ -1,7 +1,21 @@
 import type { Metadata } from "next";
+import { Inter, Barlow_Condensed } from "next/font/google";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const barlowCondensed = Barlow_Condensed({
+  subsets: ["latin"],
+  weight: ["700", "800", "900"],
+  variable: "--font-condensed",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -34,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-ZA">
+    <html lang="en-ZA" className={`${inter.variable} ${barlowCondensed.variable}`}>
       <body>
         <Header />
         <main>{children}</main>
